@@ -38,8 +38,17 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .authorizeHttpRequests(auth -> auth
+
+                        // Swagger
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
 
                         // Preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -47,17 +56,18 @@ public class SecurityConfig {
                         // Auth
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Skills
-                        .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/skills").permitAll()
+                        // Skills (🔥 FIX HERE)
+                        .requestMatchers(HttpMethod.POST, "/api/skills").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/skills").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/skills/my").authenticated()
 
                         // Swaps — STUDENT
-                        .requestMatchers(HttpMethod.POST, "/api/swaps").hasRole("STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/swaps/incoming").hasRole("STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/swaps/outgoing").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/api/swaps").hasAuthority("STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/swaps/incoming").hasAuthority("STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/swaps/outgoing").hasAuthority("STUDENT")
 
-                        // Swaps — ADMIN
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // Admin
+                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
 
                         .anyRequest().authenticated()
                 );
@@ -65,3 +75,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+

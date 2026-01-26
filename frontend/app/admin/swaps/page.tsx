@@ -43,10 +43,7 @@ export default function AdminSwapsPage() {
     <ProtectedRoute role="ADMIN">
       <Navbar />
 
-      <main
-        className="min-h-screen"
-        style={{ backgroundColor: theme.background }}
-      >
+      <main className="min-h-screen bg-[var(--background)]">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <h1
             className="text-2xl font-semibold mb-6"
@@ -56,9 +53,7 @@ export default function AdminSwapsPage() {
           </h1>
 
           {loading && (
-            <p style={{ color: theme.textSecondary }}>
-              Loading swap requests…
-            </p>
+            <p style={{ color: theme.textSecondary }}>Loading swap requests…</p>
           )}
 
           {!loading && swaps.length === 0 && (
@@ -84,10 +79,7 @@ export default function AdminSwapsPage() {
                   >
                     {swap.skillName}
                   </h3>
-                  <p
-                    className="text-sm"
-                    style={{ color: theme.textSecondary }}
-                  >
+                  <p className="text-sm" style={{ color: theme.textSecondary }}>
                     {swap.senderEmail} → {swap.receiverEmail}
                   </p>
                 </div>
@@ -100,14 +92,14 @@ export default function AdminSwapsPage() {
                         swap.status === "PENDING"
                           ? "#FEF3C7"
                           : swap.status === "APPROVED"
-                          ? "#DCFCE7"
-                          : "#FEE2E2",
+                            ? "#DCFCE7"
+                            : "#FEE2E2",
                       color:
                         swap.status === "PENDING"
                           ? "#92400E"
                           : swap.status === "APPROVED"
-                          ? "#166534"
-                          : "#991B1B",
+                            ? "#166534"
+                            : "#991B1B",
                     }}
                   >
                     {swap.status}

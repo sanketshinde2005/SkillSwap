@@ -28,15 +28,9 @@ export default function SwapsPage() {
     <ProtectedRoute>
       <Navbar />
 
-      <main
-        className="min-h-screen"
-        style={{ backgroundColor: theme.background }}
-      >
+      <main className="min-h-screen bg-[var(--background)]">
         <div className="max-w-5xl mx-auto px-6 py-10">
-          <h1
-            className="text-2xl font-semibold mb-6"
-            style={{ color: theme.textPrimary }}
-          >
+          <h1 className="text-2xl font-semibold mb-6 text-[var(--text-primary)]">
             My Swaps
           </h1>
 
@@ -49,9 +43,9 @@ export default function SwapsPage() {
                 className="px-4 py-2 rounded-lg text-sm font-medium transition"
                 style={{
                   backgroundColor:
-                    tab === t ? theme.primary : theme.surface,
-                  color: tab === t ? "#fff" : theme.textPrimary,
-                  border: `1px solid ${theme.border}`,
+                    tab === t ? "var(--primary)" : "var(--surface)",
+                  color: tab === t ? "#fff" : "var(--text-primary)",
+                  border: `1px solid var(--border)`,
                 }}
               >
                 {t === "incoming" ? "Incoming" : "Outgoing"}
@@ -61,9 +55,7 @@ export default function SwapsPage() {
 
           {/* Loading */}
           {loading && (
-            <p style={{ color: theme.textSecondary }}>
-              Loading swaps…
-            </p>
+            <p style={{ color: theme.textSecondary }}>Loading swaps…</p>
           )}
 
           {/* ✅ Empty state (THIS answers your last question) */}

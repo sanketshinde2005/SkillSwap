@@ -14,7 +14,10 @@ export async function login(email: string, password: string) {
 
   localStorage.setItem("token", token);
 
-  return decodeJwt(token);
+  const decoded = decodeJwt(token);
+  if (!decoded) throw new Error("Invalid token");
+
+  return decoded;
 }
 
 export function logout() {

@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { theme } from "@/lib/theme";
 import { isLoggedIn, getUserRole, logout } from "@/lib/auth";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState<"ADMIN" | "STUDENT" | null>(null);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const syncAuthState = () => {
@@ -15,72 +16,71 @@ export default function Navbar() {
       setRole(getUserRole());
     };
 
-    // Initial check (client-side only)
     syncAuthState();
-
-    // Sync across tabs
     window.addEventListener("storage", syncAuthState);
-
     return () => window.removeEventListener("storage", syncAuthState);
   }, []);
 
   return (
-    <nav
-      className="w-full border-b"
-      style={{
-        backgroundColor: theme.surface,
-        borderColor: theme.border,
-      }}
-    >
+    <nav className="w-full border-b bg-[var(--background)] border-[var(--border)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="text-xl font-semibold"
-          style={{ color: theme.primary }}
-        >
+        <Link href="/" className="text-xl font-semibold text-blue-600">
           SkillSwap
         </Link>
 
-        {/* Links */}
-        <div className="flex gap-6 text-sm items-center">
-          {loggedIn ? (
+        <div className="flex gap-5 text-sm items-center">
+          {loggedIn && (
             <>
-              <Link href="/skills" style={{ color: theme.textPrimary }}>
+              <Link
+                href="/skills"
+                className="text-[var(--text-primary)] hover:text-[var(--primary)]"
+              >
                 Skills
               </Link>
-
-              <Link href="/swaps" style={{ color: theme.textPrimary }}>
+              <Link
+                href="/swaps"
+                className="text-[var(--text-primary)] hover:text-[var(--primary)]"
+              >
                 Swaps
               </Link>
 
-              {/* 🔐 ADMIN ONLY LINK */}
               {role === "ADMIN" && (
-                <Link
-                  href="/admin/swaps"
-                  style={{ color: theme.primary }}
-                >
+                <Link href="/admin/swaps" className="text-[var(--primary)]">
                   Admin
                 </Link>
               )}
+
+              <button
+                onClick={toggleTheme}
+                className="px-3 py-1 rounded border border-[var(--border)] text-[var(--text-primary)] text-xs hover:bg-[var(--surface)]"
+              >
+                {theme === "dark" ? "☀ Light" : "🌙 Dark"}
+              </button>
 
               <button
                 onClick={() => {
                   logout();
                   window.location.href = "/login";
                 }}
-                style={{ color: theme.primary }}
+                className="text-[var(--primary)] hover:text-[var(--primary-hover)]"
               >
                 Logout
               </button>
             </>
-          ) : (
+          )}
+
+          {!loggedIn && (
             <>
-              <Link href="/login" style={{ color: theme.textPrimary }}>
+              <Link
+                href="/login"
+                className="text-[var(--text-primary)] hover:text-[var(--primary)]"
+              >
                 Login
               </Link>
-
-              <Link href="/register" style={{ color: theme.primary }}>
+              <Link
+                href="/register"
+                className="text-[var(--primary)] hover:text-[var(--primary-hover)]"
+              >
                 Register
               </Link>
             </>

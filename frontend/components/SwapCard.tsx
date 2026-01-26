@@ -9,17 +9,16 @@ const remind: Record<string, string> = {
 
 export default function SwapCard({ swap }: { swap: Swap }) {
   return (
-    <div
-      className="rounded-xl border p-4 shadow-sm bg-white"
-      style={{ borderColor: theme.border }}
-    >
-      <h3 className="font-semibold mb-1">{swap.skillName}</h3>
+    <div className="rounded-xl border border-[var(--border)] p-4 shadow-sm bg-[var(--surface)]">
+      <h3 className="font-semibold mb-1 text-[var(--text-primary)]">
+        {swap.skillName}
+      </h3>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-[var(--text-secondary)]">
         From: {swap.senderEmail}
       </p>
 
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-[var(--text-secondary)]">
         To: {swap.receiverEmail}
       </p>
 

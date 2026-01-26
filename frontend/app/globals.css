@@ -1,28 +1,77 @@
 @import "tailwindcss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---------- CSS VARIABLES ---------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f9fafb;
+  --foreground: #111827;
+  --border: #e5e7eb;
+  --surface: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --error-text: #dc2626;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ---------- DARK MODE VARIABLES ---------- */
+html.dark {
+  --background: #0f172a;
+  --foreground: #e5e7eb;
+  --border: #334155;
+  --surface: #1e293b;
+  --text-primary: #e5e7eb;
+  --text-secondary: #94a3b8;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --error-bg: #451a1a;
+  --error-border: #7f1d1d;
+  --error-text: #ef4444;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ---------- BASE ---------- */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* ---------- INPUT FIX ---------- */
+input,
+textarea,
+select {
+  background-color: #ffffff;
+  color: #111827;
+  border: 1px solid var(--border);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* ---------- INPUTS IN DARK MODE ---------- */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #020617;
+  color: #e5e7eb;
+  border-color: var(--border);
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748b;
+}
+
+/* ---------- BUTTON HELPERS ---------- */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
