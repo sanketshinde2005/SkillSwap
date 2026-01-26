@@ -51,13 +51,6 @@ export default function Navbar() {
               )}
 
               <button
-                onClick={toggleTheme}
-                className="px-3 py-1 rounded border border-[var(--border)] text-[var(--text-primary)] text-xs hover:bg-[var(--surface)]"
-              >
-                {theme === "dark" ? "☀ Light" : "🌙 Dark"}
-              </button>
-
-              <button
                 onClick={() => {
                   logout();
                   window.location.href = "/login";
@@ -85,6 +78,13 @@ export default function Navbar() {
               </Link>
             </>
           )}
+
+          <button
+            onClick={toggleTheme}
+            className="px-3 py-1 rounded border border-[var(--border)] text-[var(--text-primary)] text-xs hover:bg-[var(--surface)]"
+          >
+            {theme === "dark" ? "☀ Light" : "🌙 Dark"}
+          </button>
         </div>
       </div>
     </nav>
