@@ -37,8 +37,8 @@ export default function RegisterPage() {
 
       <main className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 bg-[var(--background)]">
         <div
-          className="w-full max-w-md rounded-2xl border border-[var(--border)]
-                        bg-white dark:bg-slate-900 shadow-lg p-8"
+          className="w-full max-w-md rounded-2xl border
+                     bg-[var(--surface)] shadow-lg p-8"
         >
           <h2 className="text-3xl font-semibold text-center mb-2 text-[var(--foreground)]">
             Create Account

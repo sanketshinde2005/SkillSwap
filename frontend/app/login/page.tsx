@@ -30,7 +30,7 @@ export default function LoginPage() {
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
-          "Login failed. Check console for details.",
+          "Login failed. Invalid Credentials.",
       );
     } finally {
       setLoading(false);

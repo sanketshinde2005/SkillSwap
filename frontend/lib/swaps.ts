@@ -32,3 +32,12 @@ export async function fetchIncomingSwaps(): Promise<Swap[]> {
   const res = await api.get("/api/swaps/incoming");
   return res.data;
 }
+// ✅ Skills already requested by logged-in student
+export async function fetchRequestedSkillIds(): Promise<number[]> {
+  const res = await api.get("/api/swaps/requested-skills");
+  return res.data;
+}
+// ❌ Cancel pending swap request
+export async function cancelSwapRequest(skillId: number) {
+  await api.delete(`/api/swaps/${skillId}/cancel`);
+}

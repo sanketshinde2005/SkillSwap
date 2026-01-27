@@ -2,9 +2,11 @@ package com.skillswap.skill;
 
 import com.skillswap.skill.dto.SkillRequest;
 import com.skillswap.skill.dto.SkillResponse;
+import com.skillswap.swap.SwapRequestRepository;
+import com.skillswap.swap.SwapStatus;
 import com.skillswap.user.User;
 import com.skillswap.user.UserRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,27 +17,35 @@ public class SkillController {
 
     private final SkillRepository skillRepository;
     private final UserRepository userRepository;
+    private final SwapRequestRepository swapRequestRepository;
 
-    public SkillController(SkillRepository skillRepository, UserRepository userRepository) {
+    public SkillController(
+            SkillRepository skillRepository,
+            UserRepository userRepository,
+            SwapRequestRepository swapRequestRepository
+    ) {
         this.skillRepository = skillRepository;
         this.userRepository = userRepository;
+        this.swapRequestRepository = swapRequestRepository;
     }
 
-    // ✅ Any authenticated user
+    // ===============================
+    // ✅ ADD SKILL
+    // ===============================
     @PostMapping
-    public Skill addSkill(@RequestBody SkillRequest request) {
-        String email = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
+    public Skill addSkill(@RequestBody SkillRequest request, Authentication auth) {
 
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(auth.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return skillRepository.save(
                 new Skill(request.getName(), request.getType(), user)
         );
     }
 
-    // ✅ Any authenticated user (THIS is the failing one)
+    // ===============================
+    // ✅ GET ALL SKILLS
+    // ===============================
     @GetMapping
     public List<SkillResponse> getAllSkills() {
 
@@ -50,27 +60,36 @@ public class SkillController {
                 .toList();
     }
 
+    // ===============================
+    // ✅ DELETE SKILL (OWNER ONLY)
+    // ===============================
+    @DeleteMapping("/{id}")
+    public void deleteSkill(@PathVariable Long id, Authentication auth) {
 
-    // ✅ User-specific
-    @GetMapping("/my")
-    public List<SkillResponse> mySkills() {
+        User user = userRepository.findByEmail(auth.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        String email = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
+        Skill skill = skillRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Skill not found"));
 
-        User user = userRepository.findByEmail(email).orElseThrow();
+        // ❌ Ownership check
+        if (!skill.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("You can delete only your own skills");
+        }
 
-        return skillRepository.findByUser(user)
-                .stream()
-                .map(skill -> new SkillResponse(
-                        skill.getId(),
-                        skill.getName(),
-                        skill.getType(),
-                        user.getEmail()
-                ))
-                .toList();
+        // ❌ Active swap protection
+        boolean hasActiveSwaps =
+                swapRequestRepository.existsBySkillAndStatusIn(
+                        skill,
+                        List.of(SwapStatus.PENDING, SwapStatus.APPROVED)
+                );
+
+        if (hasActiveSwaps) {
+            throw new IllegalArgumentException(
+                    "Skill cannot be deleted while it has active swap requests"
+            );
+        }
+
+        skillRepository.delete(skill);
     }
-
 }
-

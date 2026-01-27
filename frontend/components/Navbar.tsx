@@ -44,6 +44,13 @@ export default function Navbar() {
                 Swaps
               </Link>
 
+              <Link
+                href="/profile"
+                className="text-[var(--text-primary)] hover:text-[var(--primary)]"
+              >
+                Profile
+              </Link>
+
               {role === "ADMIN" && (
                 <Link href="/admin/swaps" className="text-[var(--primary)]">
                   Admin

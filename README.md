@@ -567,55 +567,6 @@ frontend/__tests__/
 └── utils/
 ```
 
----
-
-## 🚀 Deployment
-
-### 🐳 Docker Deployment
-
-```dockerfile
-# Backend Dockerfile
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-```dockerfile
-# Frontend Dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-### ☁️ Cloud Deployment
-
-#### Backend (Railway/Render/Heroku)
-
-```bash
-# Build and deploy
-./mvnw clean package -DskipTests
-# Upload JAR file to your cloud platform
-```
-
-#### Frontend (Vercel/Netlify)
-
-```bash
-# Deploy to Vercel
-npm install -g vercel
-vercel --prod
-
-# Or deploy to Netlify
-npm install -g netlify-cli
-netlify deploy --prod --dir=out
-```
-
 ### 🔧 Environment Variables
 
 ```bash
@@ -693,23 +644,13 @@ copies or substantial portions of the Software.
 
 ## 👥 Authors
 
-### 🎯 Project Lead
+### 🎯 Developer
 
-- **Sanket Shinde** - _Full-Stack Developer_ - [GitHub](https://github.com/sanketshinde2005)
-
-### 🤝 Contributors
-
-- **Community Contributors** - We welcome all contributions!
+- **Sanket Shinde** - _Trying to get better_ - [GitHub](https://github.com/sanketshinde2005)
 
 ---
 
 ## 🙏 Acknowledgments
-
-### 📚 Inspiration
-
-- **Peer-to-peer learning** movement
-- **Open source education** initiatives
-- **Student collaboration** platforms
 
 ### 🛠️ Technologies & Tools
 
@@ -717,12 +658,6 @@ copies or substantial portions of the Software.
 - **Next.js Team** for the amazing framework
 - **PostgreSQL** for reliable database solutions
 - **Tailwind CSS** for utility-first styling
-
-### 🎓 Special Thanks
-
-- **Educational institutions** supporting skill development
-- **Open source community** for inspiration and tools
-- **Students worldwide** who believe in collaborative learning
 
 ---
 
@@ -736,18 +671,6 @@ Need help? Here's how to get in touch:
 - **💬 Discord**: [Join our community](#)
 
 ---
-
-## 🎯 Roadmap
-
-### 🚀 Upcoming Features
-
-- [ ] **Real-time chat** for swap coordination
-- [ ] **Skill rating system** for quality assurance
-- [ ] **Mobile app** (React Native)
-- [ ] **Video tutorials** integration
-- [ ] **Advanced analytics** dashboard
-- [ ] **Multi-language support**
-- [ ] **Integration with learning platforms**
 
 ### 🔄 Version History
 

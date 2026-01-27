@@ -38,7 +38,6 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeHttpRequests(auth -> auth
@@ -56,23 +55,35 @@ public class SecurityConfig {
                         // Auth
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Skills (🔥 FIX HERE)
-                        .requestMatchers(HttpMethod.POST, "/api/skills").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/skills").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/skills/my").authenticated()
+                        // Skills
+                        .requestMatchers("/api/skills/**").authenticated()
 
                         // Swaps — STUDENT
-                        .requestMatchers(HttpMethod.POST, "/api/swaps").hasAuthority("STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/swaps/incoming").hasAuthority("STUDENT")
-                        .requestMatchers(HttpMethod.GET, "/api/swaps/outgoing").hasAuthority("STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/api/swaps")
+                        .hasAuthority("ROLE_STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/swaps/incoming")
+                        .hasAuthority("ROLE_STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/swaps/outgoing")
+                        .hasAuthority("ROLE_STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/api/swaps/requested-skills")
+                        .hasAuthority("ROLE_STUDENT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/swaps/**")
+                        .hasAuthority("ROLE_STUDENT")
 
-                        // Admin
-                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+                        // Swaps — ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/swaps")
+                        .hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/swaps/**")
+                        .hasAuthority("ROLE_ADMIN")
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasAuthority("STUDENT")
+
 
                         .anyRequest().authenticated()
                 );
 
         return http.build();
     }
+
 }
 

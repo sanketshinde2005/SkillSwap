@@ -16,3 +16,8 @@ export async function createSkill(
   });
   return res.data;
 }
+
+export async function deleteSkill(skillId: number) {
+  await api.delete(`/api/skills/${skillId}`);
+}
+

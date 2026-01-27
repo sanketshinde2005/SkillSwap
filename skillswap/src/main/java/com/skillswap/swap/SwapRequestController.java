@@ -103,6 +103,19 @@ public class SwapRequestController {
     }
 
     // ===============================
+    // ✅ NEW: REQUESTED SKILL IDS (STUDENT)
+    // ===============================
+    @GetMapping("/requested-skills")
+    public List<Long> requestedSkills(Authentication authentication) {
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return swapRequestRepository.findRequestedSkillIdsBySender(user);
+    }
+
+    // ===============================
     // ✅ ADMIN: LIST ALL SWAPS (PAGINATED)
     // ===============================
     @GetMapping
@@ -162,4 +175,29 @@ public class SwapRequestController {
                 swap.getStatus()
         );
     }
+
+    // ===============================
+// ❌ CANCEL SWAP REQUEST (STUDENT)
+// ===============================
+    @DeleteMapping("/{skillId}/cancel")
+    public void cancelSwapRequest(
+            @PathVariable Long skillId,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        SwapRequest swap = swapRequestRepository
+                .findBySenderAndSkillIdAndStatus(
+                        user,
+                        skillId,
+                        SwapStatus.PENDING
+                )
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "No pending swap request found"));
+
+        swapRequestRepository.delete(swap);
+    }
+
 }
