@@ -39,7 +39,7 @@ export default function SkillCard({ skill, isRequested }: Props) {
     setError("");
 
     try {
-      await requestSwap(skill.id);
+      await requestSwap(skill.id, selectedOfferId as number);
       window.location.reload();
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to request swap");

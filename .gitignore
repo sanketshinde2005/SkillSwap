@@ -302,3 +302,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Local documentation files (not to be pushed)
+IMPLEMENTATION_SUMMARY.md
+README_IMPLEMENTATION.md
+QUICK_REFERENCE.md
+FEATURE_COMPLETION_CHECKLIST.md
+DETAILED_CHANGES.md

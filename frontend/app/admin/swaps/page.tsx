@@ -68,7 +68,13 @@ export default function AdminSwapsPage() {
               >
                 <div>
                   <h3 className="font-medium text-[var(--text-primary)]">
-                    {swap.skillName}
+                    {swap.requestedSkillName}
+                    {swap.offeredSkillName && (
+                      <span className="text-xs text-[var(--text-secondary)]">
+                        {" "}
+                        ← {swap.offeredSkillName}
+                      </span>
+                    )}
                   </h3>
                   <p className="text-sm text-[var(--text-secondary)]">
                     {swap.senderEmail} → {swap.receiverEmail}
@@ -95,17 +101,22 @@ export default function AdminSwapsPage() {
                     <>
                       <button
                         onClick={() => handleApprove(swap.id)}
-                        className="px-3 py-1 text-sm rounded-md btn"
+                        className="px-3 py-1 text-sm rounded-md font-medium transition"
+                        style={{
+                          backgroundColor: "var(--success)",
+                          color: "var(--text-primary)",
+                          border: "2px solid var(--border-primary)",
+                        }}
                       >
                         Approve
                       </button>
                       <button
                         onClick={() => handleReject(swap.id)}
-                        className="px-3 py-1 text-sm rounded-md border-2 px-3 py-1 text-sm rounded-md"
+                        className="px-3 py-1 text-sm rounded-md font-medium transition"
                         style={{
                           backgroundColor: "var(--error)",
                           color: "var(--text-primary)",
-                          borderColor: "var(--border-primary)",
+                          border: "2px solid var(--border-primary)",
                         }}
                       >
                         Reject

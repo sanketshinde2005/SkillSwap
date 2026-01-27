@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { fetchIncomingSwaps, fetchOutgoingSwaps, Swap } from "@/lib/swaps";
-import StatusPill from "@/components/StatusPill";
+import SwapCard from "@/components/SwapCard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function SwapsPage() {
@@ -11,16 +11,22 @@ export default function SwapsPage() {
   const [swaps, setSwaps] = useState<Swap[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  async function loadSwaps() {
     setLoading(true);
-
     const fetcher =
       tab === "incoming" ? fetchIncomingSwaps : fetchOutgoingSwaps;
+    try {
+      const data = await fetcher();
+      setSwaps(data);
+    } catch (err) {
+      setSwaps([]);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    fetcher()
-      .then(setSwaps)
-      .catch(() => setSwaps([]))
-      .finally(() => setLoading(false));
+  useEffect(() => {
+    loadSwaps();
   }, [tab]);
 
   return (
@@ -80,24 +86,12 @@ export default function SwapsPage() {
           {!loading && swaps.length > 0 && (
             <div className="space-y-4">
               {swaps.map((swap) => (
-                <div
+                <SwapCard
                   key={swap.id}
-                  className="card p-4 flex justify-between items-center"
-                >
-                  <div>
-                    <h3 className="font-medium text-[var(--text-primary)]">
-                      {swap.skillName}
-                    </h3>
-                    <p className="text-sm text-[var(--text-secondary)]">
-                      {tab === "incoming"
-                        ? `From: ${swap.senderEmail}`
-                        : `To: ${swap.receiverEmail}`}
-                    </p>
-                  </div>
-
-                  {/* ✅ StatusPill used here */}
-                  <StatusPill status={swap.status} />
-                </div>
+                  swap={swap}
+                  isIncoming={tab === "incoming"}
+                  onAction={loadSwaps}
+                />
               ))}
             </div>
           )}

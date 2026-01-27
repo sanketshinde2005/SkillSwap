@@ -153,10 +153,72 @@ public class SwapRequestController {
     }
 
     // ===============================
-    // ✅ APPROVE SWAP (ADMIN)
+    // ✅ ACCEPT SWAP (PEER - RECEIVER ONLY)
     // ===============================
-    @PatchMapping("/{id}/approve")
-    public SwapRequestResponseDto approveSwap(@PathVariable Long id) {
+    @PatchMapping("/{id}/accept")
+    public SwapRequestResponseDto acceptSwap(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        SwapRequest swap = swapRequestRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Swap not found"));
+
+        // ❌ Only receiver can accept
+        if (!swap.getReceiver().getId().equals(currentUser.getId())) {
+            throw new IllegalArgumentException("Only the skill owner can accept this swap");
+        }
+
+        if (swap.getStatus() != SwapStatus.PENDING) {
+            throw new IllegalArgumentException("Swap already processed");
+        }
+
+        swap.setStatus(SwapStatus.APPROVED);
+        SwapRequest saved = swapRequestRepository.save(swap);
+
+        // ✅ Lock both skills when swap is approved
+        lockSkillForSwap(swap.getSkill());
+        lockSkillForSwap(swap.getOfferedSkill());
+
+        return mapToDto(saved);
+    }
+
+    // ===============================
+    // ✅ REJECT SWAP (PEER - RECEIVER ONLY)
+    // ===============================
+    @PatchMapping("/{id}/reject")
+    public SwapRequestResponseDto rejectSwap(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        SwapRequest swap = swapRequestRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Swap not found"));
+
+        // ❌ Only receiver can reject
+        if (!swap.getReceiver().getId().equals(currentUser.getId())) {
+            throw new IllegalArgumentException("Only the skill owner can reject this swap");
+        }
+
+        if (swap.getStatus() != SwapStatus.PENDING) {
+            throw new IllegalArgumentException("Swap already processed");
+        }
+
+        swap.setStatus(SwapStatus.REJECTED);
+        return mapToDto(swapRequestRepository.save(swap));
+    }
+
+    // ===============================
+    // ✅ APPROVE SWAP (ADMIN ONLY - Legacy support)
+    // ===============================
+    @PatchMapping("/{id}/approve-admin")
+    public SwapRequestResponseDto approveSwapAdmin(@PathVariable Long id) {
 
         SwapRequest swap = swapRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Swap not found"));
@@ -166,24 +228,23 @@ public class SwapRequestController {
         }
 
         swap.setStatus(SwapStatus.APPROVED);
-        return mapToDto(swapRequestRepository.save(swap));
+        SwapRequest saved = swapRequestRepository.save(swap);
+
+        // ✅ Lock both skills when swap is approved
+        lockSkillForSwap(swap.getSkill());
+        lockSkillForSwap(swap.getOfferedSkill());
+
+        return mapToDto(saved);
     }
 
     // ===============================
-    // ✅ REJECT SWAP (ADMIN)
+    // ✅ HELPER: Lock skill for approved swap
     // ===============================
-    @PatchMapping("/{id}/reject")
-    public SwapRequestResponseDto rejectSwap(@PathVariable Long id) {
-
-        SwapRequest swap = swapRequestRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Swap not found"));
-
-        if (swap.getStatus() != SwapStatus.PENDING) {
-            throw new IllegalArgumentException("Swap already processed");
+    private void lockSkillForSwap(Skill skill) {
+        if (skill != null && !skill.isLocked()) {
+            skill.setLocked(true);
+            skillRepository.save(skill);
         }
-
-        swap.setStatus(SwapStatus.REJECTED);
-        return mapToDto(swapRequestRepository.save(swap));
     }
 
     // ===============================
@@ -200,7 +261,7 @@ public class SwapRequestController {
         SwapRequest swap = swapRequestRepository
                 .findBySenderAndSkillIdAndStatus(user, skillId, SwapStatus.PENDING)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "No pending swap request found"));
+                "No pending swap request found"));
 
         swapRequestRepository.delete(swap);
     }
@@ -214,17 +275,14 @@ public class SwapRequestController {
                 swap.getId(),
                 swap.getSender().getEmail(),
                 swap.getReceiver().getEmail(),
-
                 swap.getSkill().getId(),
                 swap.getSkill().getName(),
-
                 swap.getOfferedSkill() != null
-                        ? swap.getOfferedSkill().getId()
-                        : null,
+                ? swap.getOfferedSkill().getId()
+                : null,
                 swap.getOfferedSkill() != null
-                        ? swap.getOfferedSkill().getName()
-                        : null,
-
+                ? swap.getOfferedSkill().getName()
+                : null,
                 swap.getStatus()
         );
     }

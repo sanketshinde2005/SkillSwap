@@ -254,10 +254,10 @@ export default function AnimatedHero3D() {
         </div>
 
         {/* Floating Badges */}
-        <div className="floating-badge badge-1">🏆</div>
+        <div className="floating-badge badge-1">🖥️</div>
         <div className="floating-badge badge-2">📊</div>
         <div className="floating-badge badge-3">🎓</div>
-        <div className="floating-badge badge-4">💼</div>
+        <div className="floating-badge badge-4">🛜</div>
 
         {/* Hover Hint - Mobile and Desktop */}
         {!isHovering && !isMobile && (

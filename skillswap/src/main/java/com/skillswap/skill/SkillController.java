@@ -44,24 +44,25 @@ public class SkillController {
     }
 
     // ===============================
-    // ✅ GET ALL SKILLS
+    // ✅ GET ALL SKILLS (exclude soft-deleted & locked)
     // ===============================
     @GetMapping
     public List<SkillResponse> getAllSkills() {
 
         return skillRepository.findAll()
                 .stream()
+                .filter(skill -> skill.isActive() && !skill.isLocked())
                 .map(skill -> new SkillResponse(
-                        skill.getId(),
-                        skill.getName(),
-                        skill.getType(),
-                        skill.getUser().getEmail()
-                ))
+                skill.getId(),
+                skill.getName(),
+                skill.getType(),
+                skill.getUser().getEmail()
+        ))
                 .toList();
     }
 
     // ===============================
-    // ✅ DELETE SKILL (OWNER ONLY)
+    // ✅ DELETE SKILL (SOFT DELETE - OWNER ONLY)
     // ===============================
     @DeleteMapping("/{id}")
     public void deleteSkill(@PathVariable Long id, Authentication auth) {
@@ -78,8 +79,8 @@ public class SkillController {
         }
 
         // ❌ Active swap protection
-        boolean hasActiveSwaps =
-                swapRequestRepository.existsBySkillAndStatusIn(
+        boolean hasActiveSwaps
+                = swapRequestRepository.existsBySkillAndStatusIn(
                         skill,
                         List.of(SwapStatus.PENDING, SwapStatus.APPROVED)
                 );
@@ -90,6 +91,8 @@ public class SkillController {
             );
         }
 
-        skillRepository.delete(skill);
+        // ✅ SOFT DELETE: mark as inactive instead of hard delete
+        skill.setActive(false);
+        skillRepository.save(skill);
     }
 }
