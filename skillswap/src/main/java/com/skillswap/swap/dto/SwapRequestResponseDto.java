@@ -5,22 +5,37 @@ import com.skillswap.swap.SwapStatus;
 public class SwapRequestResponseDto {
 
     public Long id;
+
     public String senderEmail;
     public String receiverEmail;
-    public String skillName;
+
+    // Requested skill
+    public Long requestedSkillId;
+    public String requestedSkillName;
+
+    // Offered skill
+    public Long offeredSkillId;
+    public String offeredSkillName;
+
     public SwapStatus status;
 
     public SwapRequestResponseDto(
             Long id,
             String senderEmail,
             String receiverEmail,
-            String skillName,
+            Long requestedSkillId,
+            String requestedSkillName,
+            Long offeredSkillId,
+            String offeredSkillName,
             SwapStatus status
     ) {
         this.id = id;
         this.senderEmail = senderEmail;
         this.receiverEmail = receiverEmail;
-        this.skillName = skillName;
+        this.requestedSkillId = requestedSkillId;
+        this.requestedSkillName = requestedSkillName;
+        this.offeredSkillId = offeredSkillId;
+        this.offeredSkillName = offeredSkillName;
         this.status = status;
     }
 }

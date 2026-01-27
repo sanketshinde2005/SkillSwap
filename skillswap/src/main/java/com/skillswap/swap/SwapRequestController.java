@@ -31,9 +31,9 @@ public class SwapRequestController {
         this.userRepository = userRepository;
     }
 
-    // ===============================
-    // ✅ SEND SWAP REQUEST (STUDENT)
-    // ===============================
+    // =================================================
+    // ✅ SEND SWAP REQUEST (TRUE PEER-TO-PEER SWAP)
+    // =================================================
     @PostMapping
     public SwapRequestResponseDto createSwapRequest(
             @RequestBody SwapRequestCreateDto dto,
@@ -43,26 +43,55 @@ public class SwapRequestController {
         User sender = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        Skill skill = skillRepository.findById(dto.skillId)
-                .orElseThrow(() -> new IllegalArgumentException("Skill not found"));
+        if (dto.skillId == null || dto.offeredSkillId == null) {
+            throw new IllegalArgumentException("Both skillId and offeredSkillId are required");
+        }
 
-        User receiver = skill.getUser();
+        Skill requestedSkill = skillRepository.findById(dto.skillId)
+                .orElseThrow(() -> new IllegalArgumentException("Requested skill not found"));
 
-        // ❌ Own skill protection
+        Skill offeredSkill = skillRepository.findById(dto.offeredSkillId)
+                .orElseThrow(() -> new IllegalArgumentException("Offered skill not found"));
+
+        // ❌ Block inactive skills (SOFT DELETE SAFE)
+        if (!requestedSkill.isActive() || !offeredSkill.isActive()) {
+            throw new IllegalArgumentException("One of the skills is no longer available");
+        }
+
+        User receiver = requestedSkill.getUser();
+
+        // ❌ Cannot request your own skill
         if (sender.getId().equals(receiver.getId())) {
             throw new IllegalArgumentException("You cannot request your own skill");
         }
 
+        // ❌ Offered skill must belong to sender
+        if (!offeredSkill.getUser().getId().equals(sender.getId())) {
+            throw new IllegalArgumentException("You can only offer your own skills");
+        }
+
+        // ❌ Only OFFER skills can be swapped
+        if (!"OFFER".equals(requestedSkill.getType())
+                || !"OFFER".equals(offeredSkill.getType())) {
+            throw new IllegalArgumentException("Only OFFER skills can be swapped");
+        }
+
         // ❌ Duplicate pending request protection
         if (swapRequestRepository.existsBySenderAndSkillAndStatus(
-                sender, skill, SwapStatus.PENDING)) {
+                sender, requestedSkill, SwapStatus.PENDING)) {
             throw new IllegalArgumentException(
                     "You already have a pending request for this skill"
             );
         }
 
         SwapRequest saved = swapRequestRepository.save(
-                new SwapRequest(sender, receiver, skill, SwapStatus.PENDING)
+                new SwapRequest(
+                        sender,
+                        receiver,
+                        requestedSkill,
+                        offeredSkill,
+                        SwapStatus.PENDING
+                )
         );
 
         return mapToDto(saved);
@@ -72,11 +101,9 @@ public class SwapRequestController {
     // ✅ INCOMING REQUESTS (STUDENT)
     // ===============================
     @GetMapping("/incoming")
-    public List<SwapRequestResponseDto> incomingRequests(
-            Authentication authentication) {
+    public List<SwapRequestResponseDto> incomingRequests(Authentication authentication) {
 
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return swapRequestRepository.findByReceiver(user)
@@ -89,11 +116,9 @@ public class SwapRequestController {
     // ✅ OUTGOING REQUESTS (STUDENT)
     // ===============================
     @GetMapping("/outgoing")
-    public List<SwapRequestResponseDto> outgoingRequests(
-            Authentication authentication) {
+    public List<SwapRequestResponseDto> outgoingRequests(Authentication authentication) {
 
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return swapRequestRepository.findBySender(user)
@@ -103,20 +128,19 @@ public class SwapRequestController {
     }
 
     // ===============================
-    // ✅ NEW: REQUESTED SKILL IDS (STUDENT)
+    // ✅ REQUESTED SKILL IDS (STUDENT)
     // ===============================
     @GetMapping("/requested-skills")
     public List<Long> requestedSkills(Authentication authentication) {
 
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return swapRequestRepository.findRequestedSkillIdsBySender(user);
     }
 
     // ===============================
-    // ✅ ADMIN: LIST ALL SWAPS (PAGINATED)
+    // ✅ ADMIN: LIST ALL SWAPS
     // ===============================
     @GetMapping
     public Page<SwapRequestResponseDto> getAllSwaps(
@@ -124,7 +148,6 @@ public class SwapRequestController {
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-
         return swapRequestRepository.findAll(pageable)
                 .map(this::mapToDto);
     }
@@ -164,40 +187,45 @@ public class SwapRequestController {
     }
 
     // ===============================
-    // 🔁 ENTITY → DTO MAPPER
+    // ❌ CANCEL SWAP REQUEST (STUDENT)
     // ===============================
-    private SwapRequestResponseDto mapToDto(SwapRequest swap) {
-        return new SwapRequestResponseDto(
-                swap.getId(),
-                swap.getSender().getEmail(),
-                swap.getReceiver().getEmail(),
-                swap.getSkill().getName(),
-                swap.getStatus()
-        );
-    }
-
-    // ===============================
-// ❌ CANCEL SWAP REQUEST (STUDENT)
-// ===============================
     @DeleteMapping("/{skillId}/cancel")
     public void cancelSwapRequest(
             @PathVariable Long skillId,
             Authentication authentication) {
 
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         SwapRequest swap = swapRequestRepository
-                .findBySenderAndSkillIdAndStatus(
-                        user,
-                        skillId,
-                        SwapStatus.PENDING
-                )
+                .findBySenderAndSkillIdAndStatus(user, skillId, SwapStatus.PENDING)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "No pending swap request found"));
 
         swapRequestRepository.delete(swap);
     }
 
+    // ===============================
+    // 🔁 ENTITY → DTO MAPPER
+    // ===============================
+    private SwapRequestResponseDto mapToDto(SwapRequest swap) {
+
+        return new SwapRequestResponseDto(
+                swap.getId(),
+                swap.getSender().getEmail(),
+                swap.getReceiver().getEmail(),
+
+                swap.getSkill().getId(),
+                swap.getSkill().getName(),
+
+                swap.getOfferedSkill() != null
+                        ? swap.getOfferedSkill().getId()
+                        : null,
+                swap.getOfferedSkill() != null
+                        ? swap.getOfferedSkill().getName()
+                        : null,
+
+                swap.getStatus()
+        );
+    }
 }

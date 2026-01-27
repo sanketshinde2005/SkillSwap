@@ -1,35 +1,31 @@
 import { Swap } from "@/types/swap";
-
-const statusColors: Record<string, string> = {
-  PENDING: "var(--warning)",
-  APPROVED: "var(--success)",
-  REJECTED: "var(--error)",
-};
+import StatusPill from "@/components/StatusPill";
 
 export default function SwapCard({ swap }: { swap: Swap }) {
   return (
-    <div className="card p-4">
-      <h3 className="font-semibold mb-1 text-[var(--text-primary)]">
-        {swap.skillName}
+    <div
+      className="
+        rounded-2xl
+        p-5
+        border-2
+        bg-[var(--bg-card)]
+        border-[var(--border-primary)]
+        shadow-[3px_3px_0px_var(--border-primary)]
+      "
+    >
+      <h3 className="text-sm font-semibold text-[var(--text-muted)] mb-2">
+        Skill Swap
       </h3>
 
-      <p className="text-sm text-[var(--text-secondary)]">
-        From: {swap.senderEmail}
-      </p>
+      <div className="text-sm text-[var(--text-primary)] space-y-1">
+        <p>
+          <strong>Skill:</strong> {swap.skillName}
+        </p>
+      </div>
 
-      <p className="text-sm text-[var(--text-secondary)]">
-        To: {swap.receiverEmail}
-      </p>
-
-      <span
-        className="inline-block mt-3 px-3 py-1 text-xs font-medium rounded-full"
-        style={{
-          backgroundColor: statusColors[swap.status],
-          color: "var(--text-primary)",
-        }}
-      >
-        {swap.status}
-      </span>
+      <div className="mt-4">
+        <StatusPill status={swap.status} />
+      </div>
     </div>
   );
 }

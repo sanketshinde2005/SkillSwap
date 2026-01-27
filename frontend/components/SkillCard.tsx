@@ -1,10 +1,10 @@
 "use client";
 
 import { Skill } from "@/types/skill";
-import { requestSwap, cancelSwapRequest } from "@/lib/swaps";
-import { deleteSkill } from "@/lib/skills";
+import { requestSwap } from "@/lib/swaps";
 import { getUserEmail } from "@/lib/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchSkills } from "@/lib/skills";
 
 interface Props {
   skill: Skill;
@@ -16,19 +16,31 @@ export default function SkillCard({ skill, isRequested }: Props) {
   const isOwnSkill =
     userEmail?.toLowerCase() === skill.ownerEmail.toLowerCase();
 
+  const [myOfferSkills, setMyOfferSkills] = useState<Skill[]>([]);
+  const [selectedOfferId, setSelectedOfferId] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ===============================
-  // REQUEST SWAP
-  // ===============================
+  useEffect(() => {
+    if (!isOwnSkill && !isRequested) {
+      fetchSkills().then((skills) =>
+        setMyOfferSkills(skills.filter((s) => s.type === "OFFER")),
+      );
+    }
+  }, [isOwnSkill, isRequested]);
+
   async function handleRequest() {
+    if (!selectedOfferId) {
+      setError("Please select a skill you are offering");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
       await requestSwap(skill.id);
-      window.location.reload(); // backend is source of truth
+      window.location.reload();
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to request swap");
     } finally {
@@ -36,111 +48,93 @@ export default function SkillCard({ skill, isRequested }: Props) {
     }
   }
 
-  // ===============================
-  // CANCEL SWAP REQUEST
-  // ===============================
-  async function handleCancel() {
-    setLoading(true);
-    setError("");
-
-    try {
-      await cancelSwapRequest(skill.id);
-      window.location.reload();
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to cancel request");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // ===============================
-  // DELETE OWN SKILL
-  // ===============================
-  async function handleDelete() {
-    if (!confirm("Delete this skill? This action cannot be undone.")) return;
-
-    setLoading(true);
-    setError("");
-
-    try {
-      await deleteSkill(skill.id);
-      window.location.reload();
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to delete skill");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <div className="card p-5">
+    <div
+      className="
+        rounded-2xl
+        p-5
+        border-2
+        bg-[var(--bg-card)]
+        border-[var(--border-primary)]
+        shadow-[3px_3px_0px_var(--border-primary)]
+      "
+    >
       <h3 className="text-lg font-semibold text-[var(--text-primary)]">
         {skill.name}
       </h3>
 
       <p className="text-sm mt-1 text-[var(--text-secondary)]">
-        Type: {skill.type}
-      </p>
-
-      <p className="text-sm mt-1 text-[var(--text-secondary)]">
         Owner: {skill.ownerEmail}
       </p>
 
-      {error && <p className="text-xs text-[var(--error)] mt-2">{error}</p>}
+      {error && <p className="text-xs mt-2 text-[var(--error)]">{error}</p>}
 
-      {/* ===============================
-          ACTIONS
-         =============================== */}
-
-      {/* OWN SKILL */}
+      {/* ACTION AREA */}
       {isOwnSkill ? (
-        <>
-          <button
-            disabled
-            className="mt-4 w-full py-2 rounded-md text-sm font-medium
-                       bg-[var(--border-secondary)] text-[var(--text-secondary)] cursor-not-allowed"
-          >
-            Your Skill
-          </button>
-
-          <button
-            onClick={handleDelete}
-            disabled={loading || isRequested}
-            className={`mt-2 w-full py-2 rounded-md text-sm font-medium btn
-              ${isRequested ? "cursor-not-allowed opacity-60" : ""}`}
-            style={{
-              backgroundColor: isRequested
-                ? "var(--border-secondary)"
-                : "var(--error)",
-              color: "var(--text-primary)",
-            }}
-          >
-            {isRequested
-              ? "Active Swap Exists"
-              : loading
-                ? "Deleting..."
-                : "Delete Skill"}
-          </button>
-        </>
-      ) : isRequested ? (
-        /* REQUESTED SKILL */
         <button
-          onClick={handleCancel}
-          disabled={loading}
-          className="mt-4 w-full py-2 rounded-md text-sm font-medium btn disabled:opacity-60"
-          style={{ backgroundColor: "var(--error)" }}
+          disabled
+          className="
+            mt-4 w-full py-2 rounded-xl text-sm font-medium
+            border-2 border-[var(--border-secondary)]
+            text-[var(--text-muted)]
+            cursor-not-allowed
+          "
         >
-          {loading ? "Cancelling..." : "Cancel Request"}
+          Your Skill
+        </button>
+      ) : isRequested ? (
+        <button
+          disabled
+          className="
+            mt-4 w-full py-2 rounded-xl text-sm font-medium
+            border-2 border-[var(--border-secondary)]
+            text-[var(--text-muted)]
+            cursor-not-allowed
+          "
+        >
+          Already Requested
         </button>
       ) : (
-        /* AVAILABLE SKILL */
-        <button
-          onClick={handleRequest}
-          disabled={loading}
-          className="mt-4 w-full py-2 rounded-md text-sm font-medium btn disabled:opacity-60"
-        >
-          {loading ? "Requesting..." : "Request Swap"}
-        </button>
+        <>
+          <select
+            value={selectedOfferId}
+            onChange={(e) => setSelectedOfferId(e.target.value as any)}
+            className="
+              mt-3 w-full px-3 py-2 rounded-xl
+              border-2 border-[var(--border-secondary)]
+              bg-[var(--bg-secondary)]
+              text-[var(--text-primary)]
+              focus:outline-none
+              focus:ring-2
+              focus:ring-[var(--accent-focus)]
+            "
+          >
+            <option value="">Select what you offer</option>
+            {myOfferSkills.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={handleRequest}
+            disabled={loading}
+            className="
+              mt-3 w-full py-2 rounded-xl text-sm font-medium
+              border-2 border-[var(--border-primary)]
+              bg-[var(--accent-primary)]
+              text-[var(--text-primary)]
+              hover:bg-[var(--accent-hover)]
+              active:translate-x-[-1px]
+              active:translate-y-[-1px]
+              transition
+              disabled:opacity-60
+            "
+          >
+            {loading ? "Requesting..." : "Propose Swap"}
+          </button>
+        </>
       )}
     </div>
   );

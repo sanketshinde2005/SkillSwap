@@ -12,20 +12,25 @@ public class SwapRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Who sent the request
+    // Who is requesting
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
-    // Who receives the request
+    // Owner of the requested skill
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
-    // Skill being requested
+    // Skill the sender wants to learn (existing)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "skill_id", nullable = false)
     private Skill skill;
+
+    // ✅ NEW: Skill the sender offers in return
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "offered_skill_id")
+    private Skill offeredSkill;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -33,6 +38,7 @@ public class SwapRequest {
 
     public SwapRequest() {}
 
+    // Existing constructor (kept for backward compatibility)
     public SwapRequest(User sender, User receiver, Skill skill, SwapStatus status) {
         this.sender = sender;
         this.receiver = receiver;
@@ -40,10 +46,26 @@ public class SwapRequest {
         this.status = status;
     }
 
+    // ✅ NEW constructor for true swap
+    public SwapRequest(
+            User sender,
+            User receiver,
+            Skill skill,
+            Skill offeredSkill,
+            SwapStatus status
+    ) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.skill = skill;
+        this.offeredSkill = offeredSkill;
+        this.status = status;
+    }
+
     public Long getId() { return id; }
     public User getSender() { return sender; }
     public User getReceiver() { return receiver; }
     public Skill getSkill() { return skill; }
+    public Skill getOfferedSkill() { return offeredSkill; }
     public SwapStatus getStatus() { return status; }
 
     public void setStatus(SwapStatus status) {
