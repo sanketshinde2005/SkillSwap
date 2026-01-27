@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { theme } from "@/lib/theme";
 
 interface Props {
   onClose: () => void;
@@ -35,26 +34,26 @@ export default function AddSkillModal({ onClose, onCreated }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="w-full max-w-md rounded-xl p-6 bg-[var(--surface)] border border-[var(--border)]">
+      <div className="card w-full max-w-md p-6">
         <h2 className="text-lg font-semibold mb-4 text-[var(--text-primary)]">
           Add a Skill
         </h2>
 
-        {error && (
-          <p className="text-sm text-[var(--error-text)] mb-3">{error}</p>
-        )}
+        {error && <p className="text-sm text-[var(--error)] mb-3">{error}</p>}
 
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Skill name"
-          className="w-full mb-3 px-3 py-2 rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)]"
+          className="w-full mb-3 px-3 py-2 rounded-md border-2 bg-[var(--bg-card)] text-[var(--text-primary)]"
+          style={{ borderColor: "var(--border-primary)" }}
         />
 
         <select
           value={type}
           onChange={(e) => setType(e.target.value as any)}
-          className="w-full mb-4 px-3 py-2 rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)]"
+          className="w-full mb-4 px-3 py-2 rounded-md border-2 bg-[var(--bg-card)] text-[var(--text-primary)]"
+          style={{ borderColor: "var(--border-primary)" }}
         >
           <option value="OFFER">Offer (I can teach)</option>
           <option value="LEARN">Learn (I want to learn)</option>
@@ -70,7 +69,7 @@ export default function AddSkillModal({ onClose, onCreated }: Props) {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="px-4 py-2 rounded-md text-sm text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)] disabled:opacity-60"
+            className="px-4 py-2 rounded-md text-sm btn disabled:opacity-60"
           >
             {loading ? "Adding..." : "Add Skill"}
           </button>

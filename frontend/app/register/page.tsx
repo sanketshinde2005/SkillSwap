@@ -35,21 +35,21 @@ export default function RegisterPage() {
     <>
       <Navbar />
 
-      <main className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 bg-[var(--background)]">
-        <div
-          className="w-full max-w-md rounded-2xl border
-                     bg-[var(--surface)] shadow-lg p-8"
-        >
-          <h2 className="text-3xl font-semibold text-center mb-2 text-[var(--foreground)]">
+      <main className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 bg-[var(--bg-primary)]">
+        <div className="card w-full max-w-md p-8">
+          <h2 className="text-3xl font-semibold text-center mb-2 text-[var(--text-primary)]">
             Create Account
           </h2>
 
-          <p className="text-sm text-center mb-6 text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-center mb-6 text-[var(--text-secondary)]">
             Join SkillSwap and start exchanging skills
           </p>
 
           {error && (
-            <div className="mb-4 rounded-md bg-[var(--error-bg)] border border-[var(--error-border)] px-3 py-2 text-sm text-[var(--error-text)]">
+            <div
+              className="mb-4 rounded-md bg-[var(--error)] border-2 px-3 py-2 text-sm text-[var(--text-primary)]"
+              style={{ borderColor: "var(--error)" }}
+            >
               {error}
             </div>
           )}
@@ -60,7 +60,8 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
-              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)]"
+              className="w-full rounded-lg border-2 bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)]"
+              style={{ borderColor: "var(--border-primary)" }}
             />
 
             <input
@@ -69,7 +70,8 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)]"
+              className="w-full rounded-lg border-2 bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)]"
+              style={{ borderColor: "var(--border-primary)" }}
             />
 
             <input
@@ -78,13 +80,14 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)]"
+              className="w-full rounded-lg border-2 bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)]"
+              style={{ borderColor: "var(--border-primary)" }}
             />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-lg font-medium bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] disabled:opacity-70"
+              className="w-full py-2.5 rounded-lg font-medium btn disabled:opacity-70"
             >
               {loading ? "Creating account…" : "Register"}
             </button>

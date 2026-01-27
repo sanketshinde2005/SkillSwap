@@ -24,7 +24,11 @@ export default function Navbar() {
   return (
     <nav className="w-full border-b bg-[var(--background)] border-[var(--border)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="text-xl font-semibold text-blue-600">
+        <Link
+          href="/"
+          className="text-xl font-semibold"
+          style={{ color: "var(--accent-primary)" }}
+        >
           SkillSwap
         </Link>
 

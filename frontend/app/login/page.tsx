@@ -29,8 +29,7 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       setError(
-        err?.response?.data?.message ||
-          "Login failed. Invalid Credentials.",
+        err?.response?.data?.message || "Login failed. Invalid Credentials.",
       );
     } finally {
       setLoading(false);
@@ -40,8 +39,8 @@ export default function LoginPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-[var(--background)] px-4">
-        <div className="w-full max-w-md bg-[var(--surface)] rounded-2xl shadow-lg border border-[var(--border)] p-8">
+      <main className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-[var(--bg-primary)] px-4">
+        <div className="card w-full max-w-md p-8">
           <h2 className="text-3xl font-semibold text-center text-[var(--text-primary)] mb-2">
             Welcome back
           </h2>
@@ -50,7 +49,10 @@ export default function LoginPage() {
           </p>
 
           {error && (
-            <div className="mb-4 rounded-md bg-[var(--error-bg)] border border-[var(--error-border)] px-3 py-2 text-sm text-[var(--error-text)]">
+            <div
+              className="mb-4 rounded-md bg-[var(--error)] border-2 px-3 py-2 text-sm text-[var(--text-primary)]"
+              style={{ borderColor: "var(--error)" }}
+            >
               {error}
             </div>
           )}
@@ -66,8 +68,14 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)]
-                           focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                className="w-full rounded-lg border-2 bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)]
+                           focus:outline-none focus:ring-2"
+                style={
+                  {
+                    borderColor: "var(--border-primary)",
+                    "--tw-ring-color": "var(--accent-focus)",
+                  } as any
+                }
               />
             </div>
 
@@ -81,16 +89,21 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)]
-                           focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                className="w-full rounded-lg border-2 bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)]
+                           focus:outline-none focus:ring-2"
+                style={
+                  {
+                    borderColor: "var(--border-primary)",
+                    "--tw-ring-color": "var(--accent-focus)",
+                  } as any
+                }
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-[var(--primary)] hover:bg-[var(--primary-hover)]
-                         text-white py-2.5 font-medium transition disabled:opacity-60"
+              className="w-full rounded-lg py-2.5 font-medium transition btn disabled:opacity-60"
             >
               {loading ? "Logging in..." : "Login"}
             </button>

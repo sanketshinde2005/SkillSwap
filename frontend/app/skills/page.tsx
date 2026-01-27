@@ -53,29 +53,29 @@ export default function SkillsPage() {
   };
 
   const availableSkills = applyFilter(
-    skills.filter((skill) => !requestedSkillIds.includes(skill.id))
+    skills.filter((skill) => !requestedSkillIds.includes(skill.id)),
   );
 
   const requestedSkills = applyFilter(
-    skills.filter((skill) => requestedSkillIds.includes(skill.id))
+    skills.filter((skill) => requestedSkillIds.includes(skill.id)),
   );
 
   return (
     <ProtectedRoute>
       <Navbar />
 
-      <main className="min-h-screen bg-[var(--background)]">
+      <main className="min-h-screen bg-[var(--bg-primary)]">
         <div className="max-w-6xl mx-auto px-6 py-12">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold text-[var(--foreground)]">
+            <h1 className="text-2xl font-semibold text-[var(--text-primary)]">
               Skills
             </h1>
 
             {role === "STUDENT" && (
               <button
                 onClick={() => setShowModal(true)}
-                className="px-4 py-2 rounded-md text-sm text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)]"
+                className="px-4 py-2 rounded-md text-sm btn"
               >
                 + Add Skill
               </button>
@@ -88,12 +88,15 @@ export default function SkillsPage() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className="px-4 py-1.5 rounded-full text-sm border transition"
+                className="px-4 py-1.5 rounded-full text-sm border-2 transition"
                 style={{
                   backgroundColor:
-                    filter === f ? "var(--primary)" : "var(--surface)",
-                  color: filter === f ? "#fff" : "var(--text-primary)",
-                  borderColor: "var(--border)",
+                    filter === f ? "var(--accent-primary)" : "var(--bg-card)",
+                  color:
+                    filter === f
+                      ? "var(--text-primary)"
+                      : "var(--text-primary)",
+                  borderColor: "var(--border-primary)",
                 }}
               >
                 {f}
@@ -112,7 +115,9 @@ export default function SkillsPage() {
 
           {/* Error */}
           {!loading && error && (
-            <p className="text-center text-sm mt-10 text-red-500">{error}</p>
+            <p className="text-center text-sm mt-10 text-[var(--error)]">
+              {error}
+            </p>
           )}
 
           {/* Available Skills */}
@@ -124,11 +129,7 @@ export default function SkillsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
                 {availableSkills.map((skill) => (
-                  <SkillCard
-                    key={skill.id}
-                    skill={skill}
-                    isRequested={false}
-                  />
+                  <SkillCard key={skill.id} skill={skill} isRequested={false} />
                 ))}
               </div>
             </>
@@ -137,17 +138,13 @@ export default function SkillsPage() {
           {/* Requested Skills */}
           {!loading && requestedSkills.length > 0 && (
             <>
-              <h2 className="text-lg font-semibold mb-4 text-gray-500">
+              <h2 className="text-lg font-semibold mb-4 text-[var(--text-secondary)]">
                 Already Requested
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {requestedSkills.map((skill) => (
-                  <SkillCard
-                    key={skill.id}
-                    skill={skill}
-                    isRequested={true}
-                  />
+                  <SkillCard key={skill.id} skill={skill} isRequested={true} />
                 ))}
               </div>
             </>
@@ -155,7 +152,7 @@ export default function SkillsPage() {
 
           {/* Empty State */}
           {!loading && skills.length === 0 && (
-            <p className="text-center text-sm mt-10 text-gray-500 dark:text-gray-400">
+            <p className="text-center text-sm mt-10 text-[var(--text-secondary)]">
               No skills available yet.
               <br />
               Be the first to add one!

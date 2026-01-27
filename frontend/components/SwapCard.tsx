@@ -1,15 +1,14 @@
 import { Swap } from "@/types/swap";
-import { theme } from "@/lib/theme";
 
-const remind: Record<string, string> = {
-  PENDING: "#facc15",
-  APPROVED: "#22c55e",
-  REJECTED: "#ef4444",
+const statusColors: Record<string, string> = {
+  PENDING: "var(--warning)",
+  APPROVED: "var(--success)",
+  REJECTED: "var(--error)",
 };
 
 export default function SwapCard({ swap }: { swap: Swap }) {
   return (
-    <div className="rounded-xl border border-[var(--border)] p-4 shadow-sm bg-[var(--surface)]">
+    <div className="card p-4">
       <h3 className="font-semibold mb-1 text-[var(--text-primary)]">
         {swap.skillName}
       </h3>
@@ -25,8 +24,8 @@ export default function SwapCard({ swap }: { swap: Swap }) {
       <span
         className="inline-block mt-3 px-3 py-1 text-xs font-medium rounded-full"
         style={{
-          backgroundColor: remind[swap.status],
-          color: "#000",
+          backgroundColor: statusColors[swap.status],
+          color: "var(--text-primary)",
         }}
       >
         {swap.status}

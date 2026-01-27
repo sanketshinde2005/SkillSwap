@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { theme } from "@/lib/theme";
 import api from "@/lib/api";
 
 export default function AddSkillForm({ onAdded }: { onAdded: () => void }) {
@@ -29,36 +28,33 @@ export default function AddSkillForm({ onAdded }: { onAdded: () => void }) {
   }
 
   return (
-    <div
-      className="rounded-xl border p-4 mb-6"
-      style={{ backgroundColor: theme.surface, borderColor: theme.border }}
-    >
-      <h3 className="font-medium mb-2" style={{ color: theme.textPrimary }}>
+    <div className="card p-4 mb-6">
+      <h3 className="font-medium mb-2 text-[var(--text-primary)]">
         Add a Skill
       </h3>
 
-      {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
+      {error && <p className="text-xs text-[var(--error)] mb-2">{error}</p>}
 
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Skill name"
-        className="w-full mb-2 px-3 py-2 rounded border"
+        className="w-full mb-2 px-3 py-2 rounded border-2"
         style={{
-          backgroundColor: theme.background,
-          color: theme.textPrimary,
-          borderColor: theme.border,
+          backgroundColor: "var(--bg-card)",
+          color: "var(--text-primary)",
+          borderColor: "var(--border-primary)",
         }}
       />
 
       <select
         value={type}
         onChange={(e) => setType(e.target.value as any)}
-        className="w-full mb-3 px-3 py-2 rounded border"
+        className="w-full mb-3 px-3 py-2 rounded border-2"
         style={{
-          backgroundColor: theme.background,
-          color: theme.textPrimary,
-          borderColor: theme.border,
+          backgroundColor: "var(--bg-card)",
+          color: "var(--text-primary)",
+          borderColor: "var(--border-primary)",
         }}
       >
         <option value="OFFER">Offer</option>
@@ -68,10 +64,8 @@ export default function AddSkillForm({ onAdded }: { onAdded: () => void }) {
       <button
         onClick={submit}
         disabled={loading}
-        className="px-4 py-2 rounded-md text-sm"
+        className="px-4 py-2 rounded-md text-sm btn"
         style={{
-          backgroundColor: theme.primary,
-          color: "#fff",
           opacity: loading ? 0.6 : 1,
         }}
       >

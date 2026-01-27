@@ -4,9 +4,9 @@ type Props = {
 
 export default function StatusPill({ status }: Props) {
   const styles = {
-    PENDING: { bg: "#FEF3C7", color: "#92400E" },
-    APPROVED: { bg: "#DCFCE7", color: "#166534" },
-    REJECTED: { bg: "#FEE2E2", color: "#991B1B" },
+    PENDING: { bg: "var(--warning)", color: "var(--text-primary)" },
+    APPROVED: { bg: "var(--success)", color: "var(--text-primary)" },
+    REJECTED: { bg: "var(--error)", color: "var(--text-primary)" },
   }[status];
 
   return (

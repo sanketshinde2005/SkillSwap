@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { fetchIncomingSwaps, fetchOutgoingSwaps, Swap } from "@/lib/swaps";
-import { theme } from "@/lib/theme";
 import StatusPill from "@/components/StatusPill";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
@@ -28,7 +27,7 @@ export default function SwapsPage() {
     <ProtectedRoute>
       <Navbar />
 
-      <main className="min-h-screen bg-[var(--background)]">
+      <main className="min-h-screen bg-[var(--bg-primary)]">
         <div className="max-w-5xl mx-auto px-6 py-10">
           <h1 className="text-2xl font-semibold mb-6 text-[var(--text-primary)]">
             My Swaps
@@ -40,12 +39,12 @@ export default function SwapsPage() {
               <button
                 key={t}
                 onClick={() => setTab(t as "incoming" | "outgoing")}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition border-2"
                 style={{
                   backgroundColor:
-                    tab === t ? "var(--primary)" : "var(--surface)",
-                  color: tab === t ? "#fff" : "var(--text-primary)",
-                  border: `1px solid var(--border)`,
+                    tab === t ? "var(--accent-primary)" : "var(--bg-card)",
+                  color: "var(--text-primary)",
+                  borderColor: "var(--border-primary)",
                 }}
               >
                 {t === "incoming" ? "Incoming" : "Outgoing"}
@@ -55,15 +54,12 @@ export default function SwapsPage() {
 
           {/* Loading */}
           {loading && (
-            <p style={{ color: theme.textSecondary }}>Loading swaps…</p>
+            <p className="text-[var(--text-secondary)]">Loading swaps…</p>
           )}
 
           {/* ✅ Empty state (THIS answers your last question) */}
           {!loading && swaps.length === 0 && (
-            <p
-              className="text-center text-sm mt-10"
-              style={{ color: theme.textSecondary }}
-            >
+            <p className="text-center text-sm mt-10 text-[var(--text-secondary)]">
               {tab === "incoming" ? (
                 <>
                   No swap requests yet.
@@ -86,23 +82,13 @@ export default function SwapsPage() {
               {swaps.map((swap) => (
                 <div
                   key={swap.id}
-                  className="rounded-xl border p-4 flex justify-between items-center"
-                  style={{
-                    backgroundColor: theme.surface,
-                    borderColor: theme.border,
-                  }}
+                  className="card p-4 flex justify-between items-center"
                 >
                   <div>
-                    <h3
-                      className="font-medium"
-                      style={{ color: theme.textPrimary }}
-                    >
+                    <h3 className="font-medium text-[var(--text-primary)]">
                       {swap.skillName}
                     </h3>
-                    <p
-                      className="text-sm"
-                      style={{ color: theme.textSecondary }}
-                    >
+                    <p className="text-sm text-[var(--text-secondary)]">
                       {tab === "incoming"
                         ? `From: ${swap.senderEmail}`
                         : `To: ${swap.receiverEmail}`}

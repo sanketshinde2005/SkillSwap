@@ -8,7 +8,6 @@ import {
   rejectSwap,
   AdminSwap,
 } from "@/lib/adminSwaps";
-import { theme } from "@/lib/theme";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function AdminSwapsPage() {
@@ -43,21 +42,20 @@ export default function AdminSwapsPage() {
     <ProtectedRoute role="ADMIN">
       <Navbar />
 
-      <main className="min-h-screen bg-[var(--background)]">
+      <main className="min-h-screen bg-[var(--bg-primary)]">
         <div className="max-w-6xl mx-auto px-6 py-10">
-          <h1
-            className="text-2xl font-semibold mb-6"
-            style={{ color: theme.textPrimary }}
-          >
+          <h1 className="text-2xl font-semibold mb-6 text-[var(--text-primary)]">
             Admin · Swap Approvals
           </h1>
 
           {loading && (
-            <p style={{ color: theme.textSecondary }}>Loading swap requests…</p>
+            <p className="text-[var(--text-secondary)]">
+              Loading swap requests…
+            </p>
           )}
 
           {!loading && swaps.length === 0 && (
-            <p style={{ color: theme.textSecondary }}>
+            <p className="text-[var(--text-secondary)]">
               No swap requests found.
             </p>
           )}
@@ -66,20 +64,13 @@ export default function AdminSwapsPage() {
             {swaps.map((swap) => (
               <div
                 key={swap.id}
-                className="rounded-xl border p-4 flex justify-between items-center"
-                style={{
-                  backgroundColor: theme.surface,
-                  borderColor: theme.border,
-                }}
+                className="card p-4 flex justify-between items-center"
               >
                 <div>
-                  <h3
-                    className="font-medium"
-                    style={{ color: theme.textPrimary }}
-                  >
+                  <h3 className="font-medium text-[var(--text-primary)]">
                     {swap.skillName}
                   </h3>
-                  <p className="text-sm" style={{ color: theme.textSecondary }}>
+                  <p className="text-sm text-[var(--text-secondary)]">
                     {swap.senderEmail} → {swap.receiverEmail}
                   </p>
                 </div>
@@ -90,16 +81,11 @@ export default function AdminSwapsPage() {
                     style={{
                       backgroundColor:
                         swap.status === "PENDING"
-                          ? "#FEF3C7"
+                          ? "var(--warning)"
                           : swap.status === "APPROVED"
-                            ? "#DCFCE7"
-                            : "#FEE2E2",
-                      color:
-                        swap.status === "PENDING"
-                          ? "#92400E"
-                          : swap.status === "APPROVED"
-                            ? "#166534"
-                            : "#991B1B",
+                            ? "var(--success)"
+                            : "var(--error)",
+                      color: "var(--text-primary)",
                     }}
                   >
                     {swap.status}
@@ -109,20 +95,17 @@ export default function AdminSwapsPage() {
                     <>
                       <button
                         onClick={() => handleApprove(swap.id)}
-                        className="px-3 py-1 text-sm rounded-md"
-                        style={{
-                          backgroundColor: "#16A34A",
-                          color: "#fff",
-                        }}
+                        className="px-3 py-1 text-sm rounded-md btn"
                       >
                         Approve
                       </button>
                       <button
                         onClick={() => handleReject(swap.id)}
-                        className="px-3 py-1 text-sm rounded-md"
+                        className="px-3 py-1 text-sm rounded-md border-2 px-3 py-1 text-sm rounded-md"
                         style={{
-                          backgroundColor: "#DC2626",
-                          color: "#fff",
+                          backgroundColor: "var(--error)",
+                          color: "var(--text-primary)",
+                          borderColor: "var(--border-primary)",
                         }}
                       >
                         Reject

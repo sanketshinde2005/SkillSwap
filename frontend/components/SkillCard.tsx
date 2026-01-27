@@ -73,7 +73,7 @@ export default function SkillCard({ skill, isRequested }: Props) {
   }
 
   return (
-    <div className="rounded-xl p-5 border border-[var(--border)] bg-[var(--surface)]">
+    <div className="card p-5">
       <h3 className="text-lg font-semibold text-[var(--text-primary)]">
         {skill.name}
       </h3>
@@ -86,9 +86,7 @@ export default function SkillCard({ skill, isRequested }: Props) {
         Owner: {skill.ownerEmail}
       </p>
 
-      {error && (
-        <p className="text-xs text-[var(--error-text)] mt-2">{error}</p>
-      )}
+      {error && <p className="text-xs text-[var(--error)] mt-2">{error}</p>}
 
       {/* ===============================
           ACTIONS
@@ -100,7 +98,7 @@ export default function SkillCard({ skill, isRequested }: Props) {
           <button
             disabled
             className="mt-4 w-full py-2 rounded-md text-sm font-medium
-                       bg-[var(--border)] text-[var(--text-secondary)] cursor-not-allowed"
+                       bg-[var(--border-secondary)] text-[var(--text-secondary)] cursor-not-allowed"
           >
             Your Skill
           </button>
@@ -108,24 +106,29 @@ export default function SkillCard({ skill, isRequested }: Props) {
           <button
             onClick={handleDelete}
             disabled={loading || isRequested}
-            className={`mt-2 w-full py-2 rounded-md text-sm font-medium
-              ${
-                isRequested
-                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                  : "bg-red-500 hover:bg-red-600 text-white"
-              }`}
+            className={`mt-2 w-full py-2 rounded-md text-sm font-medium btn
+              ${isRequested ? "cursor-not-allowed opacity-60" : ""}`}
+            style={{
+              backgroundColor: isRequested
+                ? "var(--border-secondary)"
+                : "var(--error)",
+              color: "var(--text-primary)",
+            }}
           >
-            {isRequested ? "Active Swap Exists" : loading ? "Deleting..." : "Delete Skill"}
+            {isRequested
+              ? "Active Swap Exists"
+              : loading
+                ? "Deleting..."
+                : "Delete Skill"}
           </button>
-
         </>
       ) : isRequested ? (
         /* REQUESTED SKILL */
         <button
           onClick={handleCancel}
           disabled={loading}
-          className="mt-4 w-full py-2 rounded-md text-sm font-medium
-                     bg-red-500 hover:bg-red-600 text-white disabled:opacity-60"
+          className="mt-4 w-full py-2 rounded-md text-sm font-medium btn disabled:opacity-60"
+          style={{ backgroundColor: "var(--error)" }}
         >
           {loading ? "Cancelling..." : "Cancel Request"}
         </button>
@@ -134,9 +137,7 @@ export default function SkillCard({ skill, isRequested }: Props) {
         <button
           onClick={handleRequest}
           disabled={loading}
-          className="mt-4 w-full py-2 rounded-md text-sm font-medium
-                     bg-[var(--primary)] hover:bg-[var(--primary-hover)]
-                     text-white disabled:opacity-60"
+          className="mt-4 w-full py-2 rounded-md text-sm font-medium btn disabled:opacity-60"
         >
           {loading ? "Requesting..." : "Request Swap"}
         </button>
