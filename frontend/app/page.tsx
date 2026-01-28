@@ -239,6 +239,55 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        {/* Developer Footer */}
+        {/* Developer Footer – Thin */}
+        {/* Developer Footer – Thin with Links */}
+        <footer
+          className="border-t border-[var(--border-secondary)]
+             bg-[var(--bg-secondary)]"
+        >
+          <div className="max-w-5xl mx-auto px-4 py-2 text-center">
+            <p className="text-xs text-[var(--text-muted)] flex flex-wrap justify-center gap-2">
+              <span>
+                Built with ❤️ by{" "}
+                <span className="font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] transition">
+                  Sanket
+                </span>
+              </span>
+
+              <span className="opacity-60">•</span>
+
+              <a
+                href="mailto:sanketshinde1827@gmail.com"
+                className="hover:text-[var(--primary)] transition"
+              >
+                Email
+              </a>
+
+              <span className="opacity-60">•</span>
+
+              <a
+                href="https://www.linkedin.com/in/sanket-shinde-067650288/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--primary)] transition"
+              >
+                LinkedIn
+              </a>
+
+              <span className="opacity-60">•</span>
+
+              <a
+                href="https://github.com/sanketshinde2005"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--primary)] transition"
+              >
+                GitHub
+              </a>
+            </p>
+          </div>
+        </footer>
       </main>
     </>
   );
