@@ -55,10 +55,14 @@ public class UserController {
                 .toList();
 
         // -------------------------------
-        // Swap stats
+        // Swap stats - count only APPROVED swaps
         // -------------------------------
-        long incomingRequests = swapRequestRepository.findByReceiver(user).size();
-        long outgoingRequests = swapRequestRepository.findBySender(user).size();
+        long incomingRequests = swapRequestRepository.findByReceiver(user).stream()
+                .filter(sr -> "APPROVED".equals(sr.getStatus().name()))
+                .count();
+        long outgoingRequests = swapRequestRepository.findBySender(user).stream()
+                .filter(sr -> "APPROVED".equals(sr.getStatus().name()))
+                .count();
 
         UserProfileResponse.ProfileStats stats
                 = new UserProfileResponse.ProfileStats(

@@ -7,7 +7,9 @@ public class SwapRequestResponseDto {
     public Long id;
 
     public String senderEmail;
+    public String senderName;
     public String receiverEmail;
+    public String receiverName;
 
     // Requested skill
     public Long requestedSkillId;
@@ -22,7 +24,9 @@ public class SwapRequestResponseDto {
     public SwapRequestResponseDto(
             Long id,
             String senderEmail,
+            String senderName,
             String receiverEmail,
+            String receiverName,
             Long requestedSkillId,
             String requestedSkillName,
             Long offeredSkillId,
@@ -31,7 +35,9 @@ public class SwapRequestResponseDto {
     ) {
         this.id = id;
         this.senderEmail = senderEmail;
+        this.senderName = senderName;
         this.receiverEmail = receiverEmail;
+        this.receiverName = receiverName;
         this.requestedSkillId = requestedSkillId;
         this.requestedSkillName = requestedSkillName;
         this.offeredSkillId = offeredSkillId;

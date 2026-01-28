@@ -24,10 +24,16 @@ export default function SkillCard({ skill, isRequested }: Props) {
   useEffect(() => {
     if (!isOwnSkill && !isRequested) {
       fetchSkills().then((skills) =>
-        setMyOfferSkills(skills.filter((s) => s.type === "OFFER")),
+        setMyOfferSkills(
+          skills.filter(
+            (s) =>
+              s.type === "OFFER" &&
+              s.ownerEmail?.toLowerCase() === userEmail?.toLowerCase(),
+          ),
+        ),
       );
     }
-  }, [isOwnSkill, isRequested]);
+  }, [isOwnSkill, isRequested, userEmail]);
 
   async function handleRequest() {
     if (!selectedOfferId) {

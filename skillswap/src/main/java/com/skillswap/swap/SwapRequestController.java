@@ -297,7 +297,9 @@ public class SwapRequestController {
         return new SwapRequestResponseDto(
                 swap.getId(),
                 swap.getSender().getEmail(),
+                swap.getSender().getName(),
                 swap.getReceiver().getEmail(),
+                swap.getReceiver().getName(),
                 swap.getSkill().getId(),
                 swap.getSkill().getName(),
                 swap.getOfferedSkill() != null

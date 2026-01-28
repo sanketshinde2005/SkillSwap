@@ -83,19 +83,9 @@ export default function ChatPage() {
   return (
     <ProtectedRoute>
       <Navbar />
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        {/* Header */}
-        <div className="card mx-4 mt-4 p-4 border-b">
-          <h1 className="text-lg font-semibold text-[var(--text-primary)]">
-            Swap Chat
-          </h1>
-          <p className="text-sm text-[var(--text-secondary)] mt-1">
-            {swap.requestedSkillName} • Status: {swap.status}
-          </p>
-        </div>
-
+      <div className="fixed left-0 right-0 top-[80px] bottom-0 bg-[var(--bg-primary)]">
         {/* Chat Component */}
-        <ChatBox swapId={parseInt(swapId)} />
+        <ChatBox swapId={parseInt(swapId)} swap={swap} />
       </div>
     </ProtectedRoute>
   );

@@ -53,7 +53,7 @@ export default function Home() {
                   style={{ borderColor: "var(--border-secondary)" }}
                 >
                   <p className="text-sm text-[var(--text-muted)] mb-3">
-                    💚 Trusted by students everywhere
+                    ❤️ For the students by a student
                   </p>
                 </div>
               </div>
