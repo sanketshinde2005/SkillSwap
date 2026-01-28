@@ -44,4 +44,45 @@ public class SwapRequestResponseDto {
         this.offeredSkillName = offeredSkillName;
         this.status = status;
     }
+
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public String getSenderEmail() {
+        return senderEmail;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public String getReceiverEmail() {
+        return receiverEmail;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public Long getRequestedSkillId() {
+        return requestedSkillId;
+    }
+
+    public String getRequestedSkillName() {
+        return requestedSkillName;
+    }
+
+    public Long getOfferedSkillId() {
+        return offeredSkillId;
+    }
+
+    public String getOfferedSkillName() {
+        return offeredSkillName;
+    }
+
+    public SwapStatus getStatus() {
+        return status;
+    }
 }
