@@ -7,6 +7,7 @@ import com.skillswap.swap.SwapStatus;
 import com.skillswap.user.User;
 import com.skillswap.user.UserRepository;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,6 +65,7 @@ public class SkillController {
     // ===============================
     // ✅ DELETE SKILL (SOFT DELETE - OWNER ONLY)
     // ===============================
+    @Transactional
     @DeleteMapping("/{id}")
     public void deleteSkill(@PathVariable Long id, Authentication auth) {
 

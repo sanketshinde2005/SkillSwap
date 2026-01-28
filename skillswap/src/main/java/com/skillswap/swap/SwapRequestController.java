@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -178,6 +179,7 @@ public class SwapRequestController {
     // ===============================
     // ✅ ACCEPT SWAP (PEER - RECEIVER ONLY)
     // ===============================
+    @Transactional
     @PatchMapping("/{id}/accept")
     public SwapRequestResponseDto acceptSwap(
             @PathVariable Long id,
@@ -212,6 +214,7 @@ public class SwapRequestController {
     // ===============================
     // ✅ REJECT SWAP (PEER - RECEIVER ONLY)
     // ===============================
+    @Transactional
     @PatchMapping("/{id}/reject")
     public SwapRequestResponseDto rejectSwap(
             @PathVariable Long id,
@@ -240,6 +243,7 @@ public class SwapRequestController {
     // ===============================
     // ✅ APPROVE SWAP (ADMIN ONLY - Legacy support)
     // ===============================
+    @Transactional
     @PatchMapping("/{id}/approve-admin")
     public SwapRequestResponseDto approveSwapAdmin(@PathVariable Long id) {
 

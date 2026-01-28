@@ -3,6 +3,7 @@ package com.skillswap.security;
 import com.skillswap.user.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -11,13 +12,14 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private static final String SECRET =
-            "THIS_IS_A_VERY_SECURE_SECRET_KEY_FOR_JWT_256_BITS";
+    @Value("${jwt.secret:THIS_IS_A_DEV_ONLY_SECRET_CHANGE_IN_PROD}")
+    private String secret;
 
-    private static final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 hours
+    @Value("${jwt.expiration:86400000}")
+    private long expiration;
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+        return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(User user) {
@@ -26,7 +28,7 @@ public class JwtService {
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
