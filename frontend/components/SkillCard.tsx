@@ -63,8 +63,10 @@ export default function SkillCard({ skill, isRequested }: Props) {
         {skill.name}
       </h3>
 
-      <p className="text-sm mt-1 text-[var(--text-secondary)]">
-        Owner: {skill.ownerEmail}
+      <p className="text-sm mt-2 text-[var(--text-secondary)]">
+        {skill.type === "OFFER"
+          ? `Teaching: ${skill.ownerName || skill.ownerEmail}`
+          : `Learning: ${skill.ownerName || skill.ownerEmail}`}
       </p>
 
       {error && <p className="text-xs mt-2 text-[var(--error)]">{error}</p>}

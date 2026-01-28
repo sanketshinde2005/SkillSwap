@@ -3,4 +3,5 @@ export interface Skill {
   name: string;
   type: string;
   ownerEmail: string;
+  ownerName?: string; // Added to show who is teaching/learning from
 }

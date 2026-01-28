@@ -2,6 +2,7 @@ import { Swap } from "@/types/swap";
 import StatusPill from "@/components/StatusPill";
 import { acceptSwap, rejectSwap } from "@/lib/swaps";
 import { useState } from "react";
+import Link from "next/link";
 
 interface Props {
   swap: Swap;
@@ -127,6 +128,23 @@ export default function SwapCard({ swap, isIncoming, onAction }: Props) {
               {loading ? "..." : "Reject"}
             </button>
           </div>
+        )}
+
+        {/* CHAT BUTTON FOR APPROVED SWAPS */}
+        {swap.status === "APPROVED" && (
+          <Link href={`/chat/${swap.id}`}>
+            <button
+              className="
+                px-3 py-1 text-xs font-medium rounded-lg
+                bg-[var(--accent-primary)]
+                text-[var(--text-primary)]
+                hover:opacity-90
+                transition
+              "
+            >
+              💬 Chat
+            </button>
+          </Link>
         )}
       </div>
 

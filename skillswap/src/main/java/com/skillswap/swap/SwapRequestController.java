@@ -153,6 +153,29 @@ public class SwapRequestController {
     }
 
     // ===============================
+    // ✅ GET SWAP DETAILS BY ID
+    // ===============================
+    @GetMapping("/{id}")
+    public SwapRequestResponseDto getSwapDetails(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        SwapRequest swap = swapRequestRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Swap not found"));
+
+        // Only sender, receiver, or admin can view swap details
+        if (!swap.getSender().equals(currentUser) && !swap.getReceiver().equals(currentUser)) {
+            throw new IllegalArgumentException("You don't have permission to view this swap");
+        }
+
+        return mapToDto(swap);
+    }
+
+    // ===============================
     // ✅ ACCEPT SWAP (PEER - RECEIVER ONLY)
     // ===============================
     @PatchMapping("/{id}/accept")

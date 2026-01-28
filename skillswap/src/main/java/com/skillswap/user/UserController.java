@@ -44,12 +44,14 @@ public class UserController {
         // -------------------------------
         List<SkillResponse> offering = skillRepository.findByUser(user).stream()
                 .filter(skill -> "OFFER".equals(skill.getType()))
-                .map(this::mapSkill)
+                .map(skill -> mapSkillWithOwnerName(skill, skill.getUser().getName()))
                 .toList();
 
-        List<SkillResponse> learning = skillRepository.findByUser(user).stream()
-                .filter(skill -> "LEARN".equals(skill.getType()))
-                .map(this::mapSkill)
+        // Get all OTHER users' OFFER skills for the learning section
+        List<SkillResponse> learning = skillRepository.findAll().stream()
+                .filter(skill -> "OFFER".equals(skill.getType()))
+                .filter(skill -> !skill.getUser().equals(user)) // Exclude own skills
+                .map(skill -> mapSkillWithOwnerName(skill, skill.getUser().getName()))
                 .toList();
 
         // -------------------------------
@@ -58,8 +60,8 @@ public class UserController {
         long incomingRequests = swapRequestRepository.findByReceiver(user).size();
         long outgoingRequests = swapRequestRepository.findBySender(user).size();
 
-        UserProfileResponse.ProfileStats stats =
-                new UserProfileResponse.ProfileStats(
+        UserProfileResponse.ProfileStats stats
+                = new UserProfileResponse.ProfileStats(
                         incomingRequests,
                         outgoingRequests
                 );
@@ -83,6 +85,16 @@ public class UserController {
                 skill.getName(),
                 skill.getType(),
                 skill.getUser().getEmail()
+        );
+    }
+
+    private SkillResponse mapSkillWithOwnerName(Skill skill, String ownerName) {
+        return new SkillResponse(
+                skill.getId(),
+                skill.getName(),
+                skill.getType(),
+                skill.getUser().getEmail(),
+                ownerName
         );
     }
 }

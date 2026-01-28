@@ -57,3 +57,9 @@ export async function fetchRequestedSkillIds(): Promise<number[]> {
 export async function cancelSwapRequest(skillId: number) {
   await api.delete(`/api/swaps/${skillId}/cancel`);
 }
+
+// ✅ Get swap details by ID
+export async function fetchSwapDetails(swapId: number): Promise<Swap> {
+  const res = await api.get(`/api/swaps/${swapId}`);
+  return res.data;
+}
