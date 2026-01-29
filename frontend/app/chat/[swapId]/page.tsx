@@ -6,12 +6,12 @@ import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ChatBox from "@/components/ChatBox";
 import { fetchSwapDetails } from "@/lib/swaps";
-import { Swap } from "@/types/swap";
+import type { SwapDetails } from "@/types/swap";
 
 export default function ChatPage() {
   const params = useParams();
   const swapId = params.swapId as string;
-  const [swap, setSwap] = useState<Swap | null>(null);
+  const [swap, setSwap] = useState<SwapDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 

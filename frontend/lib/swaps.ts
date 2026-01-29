@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "./api";
+import type { SwapDetails } from "@/types/swap";
 
 /* =========================
    TYPES
@@ -109,7 +110,7 @@ export async function cancelSwapRequest(skillId: number) {
 }
 
 // ✅ Get swap details by ID
-export async function fetchSwapDetails(swapId: number): Promise<Swap> {
+export async function fetchSwapDetails(swapId: number): Promise<SwapDetails> {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const res = await fetch(`${API_BASE_URL}/api/swaps/${swapId}`, {
