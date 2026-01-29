@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
-import { fetchIncomingSwaps, fetchOutgoingSwaps, Swap } from "@/lib/swaps";
+import { fetchIncomingSwaps, fetchOutgoingSwaps } from "@/lib/swaps";
+import type { Swap } from "@/types/swap";
 import SwapCard from "@/components/SwapCard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 

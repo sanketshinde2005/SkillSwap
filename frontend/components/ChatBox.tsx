@@ -3,11 +3,11 @@
 import { useEffect, useState, useRef } from "react";
 import { getSwapMessages, sendMessage, Message } from "@/lib/chat";
 import { getUserEmail } from "@/lib/auth";
-import { Swap } from "@/types/swap";
+import type { SwapDetails } from "@/types/swap";
 
 interface Props {
   swapId: number;
-  swap?: Swap;
+  swap?: SwapDetails;
 }
 
 export default function ChatBox({ swapId, swap }: Props) {

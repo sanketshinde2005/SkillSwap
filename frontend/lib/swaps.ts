@@ -1,18 +1,5 @@
 import { API_BASE_URL } from "./api";
-import type { SwapDetails } from "@/types/swap";
-
-/* =========================
-   TYPES
-========================= */
-export interface Swap {
-  id: number;
-  senderEmail: string;
-  receiverEmail: string;
-  skillName: string;
-  offeredSkillId?: number;
-  offeredSkillName?: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
-}
+import type { Swap, SwapDetails } from "@/types/swap";
 
 /* =========================
    STUDENT ACTIONS
