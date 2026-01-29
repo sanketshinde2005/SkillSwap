@@ -1,17 +1,30 @@
-import api from "./api";
+import { API_BASE_URL } from "./api";
 import { Skill } from "@/types/skill";
 
+function getHeaders(contentType = true) {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers: Record<string, string> = {};
+  if (contentType) headers["Content-Type"] = "application/json";
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  return headers;
+}
+
 export async function fetchSkills(): Promise<Skill[]> {
-  const response = await api.get("/api/skills");
-  return response.data;
+  const res = await fetch(`${API_BASE_URL}/api/skills`, {
+    headers: getHeaders(false),
+  });
+  return res.json();
 }
 
 /**
  * ✅ NEW: Fetch current user's OFFER skills (for OFFER tab)
  */
 export async function fetchMyOffers(): Promise<Skill[]> {
-  const response = await api.get("/api/skills/my-offers");
-  return response.data;
+  const res = await fetch(`${API_BASE_URL}/api/skills/my-offers`, {
+    headers: getHeaders(false),
+  });
+  return res.json();
 }
 
 /**
@@ -19,19 +32,25 @@ export async function fetchMyOffers(): Promise<Skill[]> {
  * Supports optional search query
  */
 export async function fetchAvailableToLearn(query?: string): Promise<Skill[]> {
-  const params = query ? { query } : {};
-  const response = await api.get("/api/skills/available-to-learn", { params });
-  return response.data;
+  const q = query ? `?query=${encodeURIComponent(query)}` : "";
+  const res = await fetch(`${API_BASE_URL}/api/skills/available-to-learn${q}`, {
+    headers: getHeaders(false),
+  });
+  return res.json();
 }
 
 export async function createSkill(name: string, type: "OFFER" | "LEARN") {
-  const res = await api.post("/api/skills", {
-    name,
-    type,
+  const res = await fetch(`${API_BASE_URL}/api/skills`, {
+    method: "POST",
+    headers: getHeaders(true),
+    body: JSON.stringify({ name, type }),
   });
-  return res.data;
+  return res.json();
 }
 
 export async function deleteSkill(skillId: number) {
-  await api.delete(`/api/skills/${skillId}`);
+  await fetch(`${API_BASE_URL}/api/skills/${skillId}`, {
+    method: "DELETE",
+    headers: getHeaders(false),
+  });
 }

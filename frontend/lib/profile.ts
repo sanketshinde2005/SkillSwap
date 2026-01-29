@@ -1,4 +1,4 @@
-import api from "./api";
+import { API_BASE_URL } from "./api";
 import { Skill } from "@/types/skill";
 
 export interface UserProfile {
@@ -10,6 +10,12 @@ export interface UserProfile {
 }
 
 export async function fetchMyProfile(): Promise<UserProfile> {
-  const res = await api.get("/api/users/me");
-  return res.data;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const res = await fetch(`${API_BASE_URL}/api/users/me`, {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+  return res.json();
 }

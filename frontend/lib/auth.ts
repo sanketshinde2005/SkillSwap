@@ -1,4 +1,4 @@
-import api from "./api";
+import { API_BASE_URL } from "./api";
 import { decodeJwt } from "./jwt";
 
 /**
@@ -14,27 +14,26 @@ export async function login(email: string, password: string) {
 
   console.log("LOGIN RUNNING ON CLIENT ✅");
 
-  const response = await api.post("/api/auth/login", {
-    email,
-    password,
+  const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
   });
 
-  console.log("LOGIN RESPONSE:", response.data);
+  const response = await res.json();
 
-  const token = response.data.token;
+  console.log("LOGIN RESPONSE:", response);
+
+  const token = response.token;
 
   console.log("TOKEN BEFORE SAVE:", token);
 
   localStorage.setItem("token", token);
 
-  console.log(
-    "TOKEN AFTER SAVE:",
-    localStorage.getItem("token")
-  );
+  console.log("TOKEN AFTER SAVE:", localStorage.getItem("token"));
 
   return token;
 }
-
 
 /**
  * LOGOUT
@@ -81,17 +80,11 @@ export function getUserRole(): "STUDENT" | "ADMIN" | null {
   }
 }
 
-export async function register(
-  name: string,
-  email: string,
-  password: string
-) {
-  const response = await api.post("/api/auth/register", {
-    name,                 // ✅ MATCHES DTO
-    email,
-    password,
-    role: "STUDENT",      // ✅ REQUIRED by backend
+export async function register(name: string, email: string, password: string) {
+  const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password, role: "STUDENT" }),
   });
-
-  return response.data;
+  return res.json();
 }

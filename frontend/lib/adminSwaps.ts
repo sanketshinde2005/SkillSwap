@@ -1,4 +1,4 @@
-import api from "./api";
+import { API_BASE_URL } from "./api";
 
 export interface AdminSwap {
   id: number;
@@ -11,14 +11,37 @@ export interface AdminSwap {
 }
 
 export async function fetchAllSwaps(): Promise<AdminSwap[]> {
-  const res = await api.get("/api/swaps");
-  return res.data.content; // because backend is paginated
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const res = await fetch(`${API_BASE_URL}/api/swaps`, {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+  const data = await res.json();
+  return data.content; // because backend is paginated
 }
 
 export async function approveSwap(id: number) {
-  await api.patch(`/api/swaps/${id}/approve-admin`);
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  await fetch(`${API_BASE_URL}/api/swaps/${id}/approve-admin`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
 }
 
 export async function rejectSwap(id: number) {
-  await api.patch(`/api/swaps/${id}/reject`);
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  await fetch(`${API_BASE_URL}/api/swaps/${id}/reject`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
 }

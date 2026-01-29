@@ -1,4 +1,4 @@
-import api from "./api";
+import { API_BASE_URL } from "./api";
 
 export interface Notification {
   type: string; // "MESSAGE", "SWAP_APPROVED", "SWAP_REJECTED"
@@ -12,6 +12,12 @@ export interface Notification {
 }
 
 export async function fetchNotifications(): Promise<Notification[]> {
-  const response = await api.get("/api/notifications");
-  return response.data;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const res = await fetch(`${API_BASE_URL}/api/notifications`, {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+  return res.json();
 }
