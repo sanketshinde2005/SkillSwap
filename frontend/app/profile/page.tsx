@@ -4,16 +4,29 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { fetchMyProfile } from "@/lib/profile";
+import { getUserRole } from "@/lib/auth";
 import SkillCard from "@/components/SkillCard";
+import AdminProfile from "@/components/AdminProfile";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState<"STUDENT" | "ADMIN" | null>(null);
 
   useEffect(() => {
-    fetchMyProfile()
-      .then(setProfile)
-      .finally(() => setLoading(false));
+    const loadProfile = async () => {
+      try {
+        const data = await fetchMyProfile();
+        setProfile(data);
+        setUserRole(data.role);
+      } catch (error) {
+        console.error("Failed to load profile", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
   }, []);
 
   if (loading) {
@@ -25,6 +38,17 @@ export default function ProfilePage() {
     );
   }
 
+  // Admin profile view
+  if (userRole === "ADMIN" || profile?.role === "ADMIN") {
+    return (
+      <ProtectedRoute>
+        <Navbar />
+        <AdminProfile name={profile.name} email={profile.email} />
+      </ProtectedRoute>
+    );
+  }
+
+  // Student profile view
   return (
     <ProtectedRoute>
       <Navbar />
@@ -40,8 +64,10 @@ export default function ProfilePage() {
               {profile.email}
             </p>
             <div className="flex gap-6 mt-4 text-sm text-[var(--text-secondary)]">
-              <span>Incoming: {profile.stats.incomingRequests}</span>
-              <span>Outgoing: {profile.stats.outgoingRequests}</span>
+              <span>
+                Approved swaps received: {profile.stats.incomingRequests}
+              </span>
+              <span>Approved swaps sent: {profile.stats.outgoingRequests}</span>
             </div>
           </div>
 

@@ -36,6 +36,25 @@ public class SkillController {
     }
 
     // ===============================
+    // ✅ NEW: GET MY OFFERS (current user's OFFER skills)
+    // ===============================
+    @GetMapping("/my-offers")
+    public List<SkillResponse> getMyOffers(Authentication auth) {
+        return skillService.getMyOffers(auth.getName());
+    }
+
+    // ===============================
+    // ✅ NEW: GET AVAILABLE TO LEARN (global OFFER skills, excluding mine)
+    // ===============================
+    @GetMapping("/available-to-learn")
+    public List<SkillResponse> getAvailableToLearn(
+            @RequestParam(required = false) String query,
+            Authentication auth
+    ) {
+        return skillService.getAvailableToLearn(auth.getName(), query);
+    }
+
+    // ===============================
     // ✅ DELETE SKILL (SOFT DELETE - OWNER ONLY)
     // ===============================
     @DeleteMapping("/{id}")

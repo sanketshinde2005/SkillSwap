@@ -83,4 +83,58 @@ public class SkillService {
         skill.setActive(false);
         skillRepository.save(skill);
     }
+
+    /**
+     * ✅ NEW: Get current user's OFFER skills Used for OFFER tab: only user's
+     * own skills
+     */
+    public List<SkillResponse> getMyOffers(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return skillRepository.findActiveSkillsByUserOptimized(user)
+                .stream()
+                .filter(skill -> "OFFER".equals(skill.getType()))
+                .map(skill -> new SkillResponse(
+                skill.getId(),
+                skill.getName(),
+                skill.getType(),
+                skill.getUser().getEmail(),
+                skill.getUser().getName()
+        ))
+                .toList();
+    }
+
+    /**
+     * ✅ NEW: Get all OFFER skills except current user's Used for LEARN tab:
+     * global visibility Supports optional search query (case-insensitive,
+     * partial match)
+     */
+    public List<SkillResponse> getAvailableToLearn(String email, String query) {
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        List<SkillResponse> availableSkills = skillRepository.findAllActiveUnlockedSkillsOptimized()
+                .stream()
+                .filter(skill -> "OFFER".equals(skill.getType())) // Only OFFER skills
+                .filter(skill -> !skill.getUser().getId().equals(currentUser.getId())) // Exclude own skills
+                .map(skill -> new SkillResponse(
+                skill.getId(),
+                skill.getName(),
+                skill.getType(),
+                skill.getUser().getEmail(),
+                skill.getUser().getName()
+        ))
+                .toList();
+
+        // Apply search filter if provided
+        if (query != null && !query.trim().isEmpty()) {
+            String lowerQuery = query.toLowerCase().trim();
+            return availableSkills.stream()
+                    .filter(skill -> skill.getName().toLowerCase().contains(lowerQuery))
+                    .toList();
+        }
+
+        return availableSkills;
+    }
 }

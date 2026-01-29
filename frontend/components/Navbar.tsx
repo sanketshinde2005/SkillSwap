@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { isLoggedIn, getUserRole, logout } from "@/lib/auth";
 import { useTheme } from "@/components/ThemeProvider";
+import NotificationBox from "@/components/NotificationBox";
 
 export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -45,26 +46,44 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-6 text-sm">
           {loggedIn && (
             <>
-              {[
-                ["/skills", "Skills"],
-                ["/swaps", "Swaps"],
-                ["/profile", "Profile"],
-              ].map(([href, label]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`relative transition ${
-                    isActive(href)
-                      ? "text-[var(--primary)]"
-                      : "text-[var(--text-primary)] hover:text-[var(--primary)]"
-                  }`}
-                >
-                  {label}
-                  {isActive(href) && (
-                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-[var(--primary)] rounded-full" />
-                  )}
-                </Link>
-              ))}
+              {role === "STUDENT" && (
+                <>
+                  {[
+                    ["/skills", "Skills"],
+                    ["/swaps", "Swaps"],
+                  ].map(([href, label]) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      className={`relative transition ${
+                        isActive(href)
+                          ? "text-[var(--primary)]"
+                          : "text-[var(--text-primary)] hover:text-[var(--primary)]"
+                      }`}
+                    >
+                      {label}
+                      {isActive(href) && (
+                        <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-[var(--primary)] rounded-full" />
+                      )}
+                    </Link>
+                  ))}
+                </>
+              )}
+
+              {/* Profile - show for all logged-in users */}
+              <Link
+                href="/profile"
+                className={`relative transition ${
+                  isActive("/profile")
+                    ? "text-[var(--primary)]"
+                    : "text-[var(--text-primary)] hover:text-[var(--primary)]"
+                }`}
+              >
+                Profile
+                {isActive("/profile") && (
+                  <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-[var(--primary)] rounded-full" />
+                )}
+              </Link>
 
               {role === "ADMIN" && (
                 <Link
@@ -79,6 +98,8 @@ export default function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-3 ml-4">
+            {loggedIn && <NotificationBox />}
+
             {!loggedIn ? (
               <>
                 <Link
@@ -152,16 +173,42 @@ export default function Navbar() {
           <div className="px-6 py-4 flex flex-col gap-4 text-sm">
             {loggedIn && (
               <>
-                <Link href="/skills">Skills</Link>
-                <Link href="/swaps">Swaps</Link>
-                <Link href="/profile">Profile</Link>
-                {role === "ADMIN" && <Link href="/admin/swaps">Admin</Link>}
+                {role === "STUDENT" && (
+                  <>
+                    <Link href="/skills" onClick={() => setMenuOpen(false)}>
+                      Skills
+                    </Link>
+                    <Link href="/swaps" onClick={() => setMenuOpen(false)}>
+                      Swaps
+                    </Link>
+                  </>
+                )}
+
+                {/* Profile - show for all logged-in users */}
+                <Link href="/profile" onClick={() => setMenuOpen(false)}>
+                  Profile
+                </Link>
+
+                {role === "ADMIN" && (
+                  <Link href="/admin/swaps" onClick={() => setMenuOpen(false)}>
+                    Admin
+                  </Link>
+                )}
+
+                {/* Notifications on mobile */}
+                <div className="border-t border-[var(--border)] pt-4 mt-2">
+                  <div className="mb-3 text-xs text-[var(--text-secondary)] font-semibold">
+                    UPDATES
+                  </div>
+                  <NotificationBox />
+                </div>
+
                 <button
                   onClick={() => {
                     logout();
                     window.location.href = "/login";
                   }}
-                  className="text-left text-[var(--primary)]"
+                  className="text-left text-[var(--primary)] border-t border-[var(--border)] pt-4 mt-2"
                 >
                   Logout
                 </button>

@@ -5,60 +5,86 @@ import Navbar from "@/components/Navbar";
 import SkillCard from "@/components/SkillCard";
 import SkeletonCard from "@/components/SkeletonCard";
 import AddSkillModal from "@/components/AddSkillModal";
-import { fetchSkills } from "@/lib/skills";
+import { fetchMyOffers, fetchAvailableToLearn } from "@/lib/skills";
 import { fetchRequestedSkillIds } from "@/lib/swaps";
 import { Skill } from "@/types/skill";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { getUserRole } from "@/lib/auth";
 
-type SkillFilter = "ALL" | "OFFER" | "LEARN";
+type SkillTab = "OFFER" | "LEARN";
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [tab, setTab] = useState<SkillTab>("OFFER");
+  const [myOffers, setMyOffers] = useState<Skill[]>([]);
+  const [learnSkills, setLearnSkills] = useState<Skill[]>([]);
   const [requestedSkillIds, setRequestedSkillIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [filter, setFilter] = useState<SkillFilter>("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const role = getUserRole();
 
-  async function loadSkills() {
+  async function loadOffers() {
+    try {
+      const data = await fetchMyOffers();
+      setMyOffers(data);
+    } catch {
+      setError("Failed to load your offers");
+    }
+  }
+
+  async function loadLearnSkills(query?: string) {
+    try {
+      const data = await fetchAvailableToLearn(query);
+      setLearnSkills(data);
+    } catch {
+      setError("Failed to load available skills");
+    }
+  }
+
+  async function loadRequestedIds() {
+    try {
+      const ids = await fetchRequestedSkillIds();
+      setRequestedSkillIds(ids);
+    } catch {
+      // silently fail
+    }
+  }
+
+  async function loadAllData(query?: string) {
     setLoading(true);
     try {
-      const [skillsData, requestedIds] = await Promise.all([
-        fetchSkills(),
-        fetchRequestedSkillIds(),
+      await Promise.all([
+        loadOffers(),
+        loadLearnSkills(query),
+        loadRequestedIds(),
       ]);
-
-      setSkills(skillsData);
-      setRequestedSkillIds(requestedIds);
-    } catch {
-      setError("Failed to load skills");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    loadSkills();
+    loadAllData();
   }, []);
 
-  // -----------------------------
-  // 🔍 FILTER LOGIC
-  // -----------------------------
-  const applyFilter = (list: Skill[]) => {
-    if (filter === "ALL") return list;
-    return list.filter((skill) => skill.type === filter);
+  // Handle search input change (debounce not needed for simplicity)
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    // Load with new query
+    loadLearnSkills(query || undefined);
   };
 
-  const availableSkills = applyFilter(
-    skills.filter((skill) => !requestedSkillIds.includes(skill.id)),
-  );
+  // Get current tab data
+  const currentSkills = tab === "OFFER" ? myOffers : learnSkills;
 
-  const requestedSkills = applyFilter(
-    skills.filter((skill) => requestedSkillIds.includes(skill.id)),
-  );
+  // For LEARN tab, filter out already requested skills
+  const availableSkills =
+    tab === "LEARN"
+      ? learnSkills.filter((skill) => !requestedSkillIds.includes(skill.id))
+      : myOffers;
 
   return (
     <ProtectedRoute>
@@ -82,27 +108,42 @@ export default function SkillsPage() {
             )}
           </div>
 
-          {/* Filters */}
-          <div className="flex gap-2 mb-8">
-            {(["ALL", "OFFER", "LEARN"] as SkillFilter[]).map((f) => (
+          {/* Tabs */}
+          <div className="flex gap-2 mb-6">
+            {(["OFFER", "LEARN"] as SkillTab[]).map((t) => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className="px-4 py-1.5 rounded-full text-sm border-2 transition"
+                key={t}
+                onClick={() => {
+                  setTab(t);
+                  setSearchQuery(""); // Reset search when switching tabs
+                }}
+                className="px-4 py-2 rounded-full text-sm border-2 transition"
                 style={{
                   backgroundColor:
-                    filter === f ? "var(--accent-primary)" : "var(--bg-card)",
-                  color:
-                    filter === f
-                      ? "var(--text-primary)"
-                      : "var(--text-primary)",
+                    tab === t ? "var(--accent-primary)" : "var(--bg-card)",
+                  color: "var(--text-primary)",
                   borderColor: "var(--border-primary)",
                 }}
               >
-                {f}
+                {t === "OFFER" ? "My Offers" : "Learn"}
               </button>
             ))}
           </div>
+
+          {/* Search Bar (LEARN tab only) */}
+          {tab === "LEARN" && (
+            <div className="mb-6">
+              <input
+                type="text"
+                placeholder="Search skills (e.g., React, Python)..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="w-full px-4 py-2 rounded-lg border border-[var(--border)]
+                           bg-[var(--bg-card)] text-[var(--text-primary)]
+                           focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]"
+              />
+            </div>
+          )}
 
           {/* Loading */}
           {loading && (
@@ -120,43 +161,31 @@ export default function SkillsPage() {
             </p>
           )}
 
-          {/* Available Skills */}
-          {!loading && availableSkills.length > 0 && (
-            <>
-              <h2 className="text-lg font-semibold mb-4 text-[var(--text-primary)]">
-                Available for Swap
-              </h2>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-                {availableSkills.map((skill) => (
-                  <SkillCard key={skill.id} skill={skill} isRequested={false} />
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Requested Skills */}
-          {!loading && requestedSkills.length > 0 && (
-            <>
-              <h2 className="text-lg font-semibold mb-4 text-[var(--text-secondary)]">
-                Already Requested
-              </h2>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {requestedSkills.map((skill) => (
-                  <SkillCard key={skill.id} skill={skill} isRequested={true} />
-                ))}
-              </div>
-            </>
-          )}
-
           {/* Empty State */}
-          {!loading && skills.length === 0 && (
+          {!loading && availableSkills.length === 0 && (
             <p className="text-center text-sm mt-10 text-[var(--text-secondary)]">
-              No skills available yet.
-              <br />
-              Be the first to add one!
+              {tab === "OFFER" &&
+                "You haven't added any skills yet. Click '+ Add Skill' to get started!"}
+              {tab === "LEARN" && searchQuery && "No skills match your search."}
+              {tab === "LEARN" &&
+                !searchQuery &&
+                "No available skills to learn yet."}
             </p>
+          )}
+
+          {/* Skills Grid */}
+          {!loading && availableSkills.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {availableSkills.map((skill) => (
+                <SkillCard
+                  key={skill.id}
+                  skill={skill}
+                  isRequested={
+                    tab === "LEARN" && requestedSkillIds.includes(skill.id)
+                  }
+                />
+              ))}
+            </div>
           )}
         </div>
       </main>
@@ -164,7 +193,9 @@ export default function SkillsPage() {
       {showModal && (
         <AddSkillModal
           onClose={() => setShowModal(false)}
-          onCreated={loadSkills}
+          onCreated={() => {
+            loadAllData(tab === "LEARN" ? searchQuery : undefined);
+          }}
         />
       )}
     </ProtectedRoute>
