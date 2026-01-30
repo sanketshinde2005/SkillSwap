@@ -10,7 +10,7 @@
 
 **A platform where students exchange skills, collaborate, and grow together — completely free of charge.**
 
-[🚀 Live Demo](#) • [📖 Documentation](#) • [🐛 Report Bug](https://github.com/sanketshinde2005/SkillSwap/issues) • [✨ Request Feature](https://github.com/sanketshinde2005/SkillSwap/issues)
+[🚀 Live Demo](https://skillswap-sigma-swart.vercel.app/) • [📖 Documentation](#) • [🐛 Report Bug](https://github.com/sanketshinde2005/SkillSwap/issues) • [✨ Request Feature](https://github.com/sanketshinde2005/SkillSwap/issues)
 
 ---
 
