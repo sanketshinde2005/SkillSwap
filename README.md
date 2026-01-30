@@ -762,6 +762,9 @@ Need help? Here's how to get in touch:
 
 ⭐ **Star this repo** if you found it helpful!
 
+<img width="2560" height="1440" alt="Screenshot 2026-01-30 150828" src="https://github.com/user-attachments/assets/e10c67af-0a1d-48cf-b093-b6b9c92e2205" />
+<img width="2560" height="1440" alt="Screenshot 2026-01-30 150814" src="https://github.com/user-attachments/assets/0c6fb993-8544-4312-8500-bb65b3140b9d" />
+
 [⬆️ Back to Top](#-skillswap---student-skill-exchange-platform)
 
 </div>
