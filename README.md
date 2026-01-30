@@ -2,8 +2,7 @@
 <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/e6494a9d-2a08-46e3-9021-d74f6911e66d" />
 
 <div align="center">
-
-![SkillSwap Logo](https://img.shields.io/badge/SkillSwap-Student_Platform-blue?style=for-the-badge&logo=book&logoColor=white)
+    
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-brightgreen?style=flat-square&logo=spring&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.4-black?style=flat-square&logo=next.js&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?style=flat-square&logo=postgresql&logoColor=white)
