@@ -1,4 +1,5 @@
 # 🎓 SkillSwap - Student Skill Exchange Platform
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/e6494a9d-2a08-46e3-9021-d74f6911e66d" />
 
 <div align="center">
 
@@ -8,7 +9,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?style=flat-square&logo=postgresql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-Authentication-orange?style=flat-square&logo=jsonwebtokens&logoColor=white)
 
-**A revolutionary platform where students exchange skills, collaborate, and grow together — completely free of charge.**
+**A platform where students exchange skills, collaborate, and grow together — completely free of charge.**
 
 [🚀 Live Demo](#) • [📖 Documentation](#) • [🐛 Report Bug](https://github.com/sanketshinde2005/SkillSwap/issues) • [✨ Request Feature](https://github.com/sanketshinde2005/SkillSwap/issues)
 
@@ -58,31 +59,36 @@ SkillSwap embodies this philosophy by creating opportunities for students to tea
 
 ### 👤 User Management
 
-- 🔐 **Secure Authentication** with JWT tokens
-- 📝 **Easy Registration** with role-based access (Student/Admin)
-- 👥 **Profile Management** with skill preferences
-- 🔄 **Session Management** with automatic token refresh
+- 🔐 **Secure Authentication** with JWT tokens.
+- 📝 **Easy Registration** with role-based access (Student/Admin).
+- 👥 **Profile Management** featuring swap statistics (Incoming/Outgoing approved counts).
+- 🔄 **Session Management** with secure client-side storage.
 
-### 🎓 Skill Exchange System
+### 🎓 Skill Exchange System (True Barter)
+- 📚 **Dual Listing** - Create "OFFER" (what you teach) or "LEARN" (what you want) listings.
+- 🤝 **Peer-to-Peer Proposals** - Propose a swap by selecting which of *your* skills you will give in return for the skill you want.
+- 🔒 **Skill Locking** - Skills are automatically locked once a swap is approved to prevent double-booking.
+- 🗑️ **Soft Delete** - Skills can be deactivated without breaking transaction history.
+- ✅ **Admin/Peer Approval** - Direct receiver approval with optional admin oversight.
 
-- 📚 **Skill Listing** - Offer or request skills
-- 🔄 **Swap Requests** - Initiate skill exchange proposals
-- ✅ **Admin Approval** - Quality control for all swaps
-- 📊 **Status Tracking** - Monitor swap progress (PENDING → APPROVED → COMPLETED)
+### 💬 Communication & Notifications
 
-### 👨‍💼 Admin Dashboard
+- 💬 **Swap-Specific Chat** - Real-time messaging available exclusively for approved swap partners.
+- 🔔 **Unified Notification Feed** - A centralized "Updates" box for new messages and swap status changes (Approved/Rejected).
+- 🔄 **Smart Polling** - Optimized message fetching to keep conversations fluid.
+- 
+## 👨‍💼 Admin Dashboard
 
-- 👀 **Swap Oversight** - Review and approve/reject swap requests
-- 📈 **Platform Analytics** - Monitor user engagement and skill trends
-- 🛡️ **User Management** - Admin controls for platform maintenance
-- 📋 **Audit Trail** - Complete logging of all platform activities
+- 👀 **Swap Oversight** - Review every barter request on the platform.
+- 📈 **Platform Analytics** - Real-time stats on pending, approved, and rejected swaps.
+- 🛡️ **Role-Based Routing** - Automated redirection based on user privileges.
 
 ### 🎨 Modern UI/UX
 
-- 🌙 **Dark/Light Theme** - Seamless theme switching
-- 📱 **Responsive Design** - Works perfectly on all devices
-- ⚡ **Fast Performance** - Optimized with Next.js and Spring Boot
-- 🎯 **Intuitive Interface** - Clean, modern design with Tailwind CSS
+- 🌙 **Aesthetic Theme System** - Sophisticated light and dark modes.
+- 📱 **Responsive Design** - Fluid layouts for desktop, tablet, and mobile.
+- 🧊 **3D Visuals** - Interactive 3D cube hero section using CSS perspective.
+- ⚡ **Neobrutalist Elements** - Bold borders and high-contrast cards for a modern feel.
 
 ### 🔒 Security Features
 
@@ -274,61 +280,139 @@ Once both servers are running, visit:
 ## 📁 Project Structure
 
 ```
-SkillSwap/
-├── frontend/                          # Next.js Frontend
-│   ├── app/                          # Next.js App Router
-│   │   ├── admin/swaps/              # Admin dashboard
-│   │   ├── login/                    # Authentication pages
-│   │   ├── register/
-│   │   ├── skills/                   # Skill management
-│   │   ├── swaps/                    # Swap requests
-│   │   ├── globals.css               # Global styles & themes
-│   │   └── layout.tsx                # Root layout
-│   ├── components/                   # Reusable React components
-│   │   ├── Navbar.tsx                # Navigation with theme toggle
-│   │   ├── SkillCard.tsx             # Skill display component
-│   │   ├── SwapCard.tsx              # Swap request component
-│   │   ├── ThemeProvider.tsx         # Theme context provider
-│   │   └── ...
-│   ├── lib/                          # Utility functions
-│   │   ├── auth.ts                   # Authentication helpers
-│   │   ├── api.ts                    # API client
-│   │   ├── theme.ts                  # Theme configuration
-│   │   └── ...
-│   └── types/                        # TypeScript type definitions
-│
-├── skillswap/                        # Spring Boot Backend
-│   ├── src/main/java/com/skillswap/
-│   │   ├── SkillSwapApplication.java # Main application class
-│   │   ├── auth/                     # Authentication module
-│   │   │   ├── AuthController.java   # Auth endpoints
-│   │   │   └── dto/                  # Auth data transfer objects
-│   │   ├── config/                   # Configuration classes
-│   │   │   ├── SecurityConfig.java   # Spring Security config
-│   │   │   ├── CorsConfig.java       # CORS configuration
-│   │   │   └── OpenApiConfig.java    # Swagger config
-│   │   ├── exception/                # Global exception handling
-│   │   ├── security/                 # Security components
-│   │   │   ├── JwtService.java       # JWT token utilities
-│   │   │   └── JwtAuthFilter.java    # JWT authentication filter
-│   │   ├── skill/                    # Skill management
-│   │   │   ├── Skill.java            # Skill entity
-│   │   │   ├── SkillController.java  # Skill REST endpoints
-│   │   │   └── SkillRepository.java  # Skill data access
-│   │   ├── swap/                     # Swap request management
-│   │   │   ├── SwapRequest.java      # Swap entity
-│   │   │   ├── SwapRequestController.java
-│   │   │   └── SwapStatus.java       # Enum for swap states
-│   │   ├── user/                     # User management
-│   │   │   ├── User.java             # User entity
-│   │   │   ├── Role.java             # User roles enum
-│   │   │   └── UserRepository.java   # User data access
-│   │   └── test/                     # Test controller
-│   ├── src/main/resources/
-│   │   └── application.yml           # Application configuration
-│   └── pom.xml                       # Maven dependencies
-│
-└── README.md                         # Project documentation
+└── sanketshinde2005-skillswap/              # Root Project Directory
+    ├── README.md                            # Comprehensive project overview, setup instructions, and tech stack
+    ├── frontend/                            # Next.js Application (User Interface)
+    │   ├── README.md                        # Frontend-specific setup and environment variable guide
+    │   ├── eslint.config.mjs                # Linting rules for maintaining clean and consistent code
+    │   ├── FORCE_GITHUB_REFRESH.txt         # Trigger file for CI/CD or metadata refresh
+    │   ├── next-env.d.ts                    # Next.js TypeScript type definitions (auto-generated)
+    │   ├── next.config.ts                   # Next.js specific configurations (rewrites, images, etc.)
+    │   ├── package.json                     # Frontend dependencies and scripts (dev, build, start)
+    │   ├── postcss.config.mjs               # PostCSS setup for processing Tailwind CSS
+    │   ├── tsconfig.json                    # TypeScript compiler settings and path aliases (@/*)
+    │   ├── app/                             # Next.js App Router - Contains all routes and layouts
+    │   │   ├── globals.css                  # Global styles, variables, and Neobrutalist theme definitions
+    │   │   ├── layout.tsx                   # Root layout providing Theme and Toast context to all pages
+    │   │   ├── page.tsx                     # Landing page with interactive 3D hero and "How it works"
+    │   │   ├── admin/                       # Admin-restricted area
+    │   │   │   └── swaps/
+    │   │   │       └── page.tsx             # Panel for Admins to verify and approve global swap requests
+    │   │   ├── chat/                        # Direct messaging module
+    │   │   │   └── [swapId]/
+    │   │   │       └── page.tsx             # Real-time chat interface for approved swap partners
+    │   │   ├── login/
+    │   │   │   └── page.tsx                 # Secure login form with JWT session handling
+    │   │   ├── profile/
+    │   │   │   └── page.tsx                 # User dashboard showing personal stats and owned skills
+    │   │   ├── register/
+    │   │   │   └── page.tsx                 # New student/admin account creation
+    │   │   ├── skills/
+    │   │   │   └── page.tsx                 # Main hub to browse "Available to Learn" and "My Offers"
+    │   │   └── swaps/
+    │   │       └── page.tsx                 # Manage incoming requests and outgoing proposals
+    │   ├── components/                      # Reusable UI Components
+    │   │   ├── AddSkillForm.tsx             # Simple form component to register a new skill
+    │   │   ├── AddSkillModal.tsx            # Overlay version of skill creation for better UX
+    │   │   ├── AdminProfile.tsx             # Statistics view specific to the Admin role
+    │   │   ├── AnimatedHero3D.tsx           # Aesthetic interactive 3D Cube using CSS transforms
+    │   │   ├── ChatBox.tsx                  # Core chat logic including message polling and auto-scroll
+    │   │   ├── Navbar.tsx                   # Responsive navigation with theme toggle and notifications
+    │   │   ├── NotificationBox.tsx          # Real-time update dropdown for new messages and swap status
+    │   │   ├── ProtectedRoute.tsx           # Client-side guard to prevent unauthorized page access
+    │   │   ├── SkeletonCard.tsx             # Loading placeholders for skills to improve perceived speed
+    │   │   ├── SkillCard.tsx                # Card component handling the "Propose Swap" logic
+    │   │   ├── StatusPill.tsx               # Small UI indicator for PENDING/APPROVED/REJECTED states
+    │   │   ├── SwapCard.tsx                 # Card for managing swap actions (Accept/Reject/Chat)
+    │   │   └── ThemeProvider.tsx            # Context provider managing light/dark mode persistence
+    │   ├── lib/                             # Utility Functions and API Wrappers
+    │   │   ├── adminSwaps.ts                # API calls for administrative swap management
+    │   │   ├── api.ts                       # Axios instance with interceptors for JWT injection
+    │   │   ├── auth.client.ts               # Client-side only auth helpers (localStorage)
+    │   │   ├── auth.ts                      # Shared authentication and role-checking logic
+    │   │   ├── chat.ts                      # Methods to send/receive messages from backend
+    │   │   ├── jwt.ts                       # Token decoding logic to extract user payload
+    │   │   ├── notifications.ts             # Fetching logic for the unified notification feed
+    │   │   ├── profile.ts                   # Fetching personal user data and stats
+    │   │   ├── skills.ts                    # CRUD operations for skill listings
+    │   │   ├── swaps.ts                     # Transactional logic for initiating and accepting swaps
+    │   │   └── theme.ts                     # Visual configuration for theme colors and Neobrutalism
+    │   └── types/                           # TypeScript Interface Definitions
+    │       ├── skill.ts                     # Model for Skill objects
+    │       └── swap.ts                      # Model for Swap transaction objects
+    └── skillswap/                           # Spring Boot Backend (REST API)
+        ├── Dockerfile                       # Instructions for containerizing the Java application
+        ├── mvnw                             # Maven wrapper for Linux/macOS
+        ├── mvnw.cmd                         # Maven wrapper for Windows
+        ├── pom.xml                          # Maven configuration with dependencies (Spring Security, JPA, JJWT)
+        ├── src/
+        │   ├── main/
+        │   │   ├── java/
+        │   │   │   └── com/
+        │   │   │       └── skillswap/       # Main Backend Logic
+        │   │   │           ├── DebugController.java        # Development-only endpoint to check server health
+        │   │   │           ├── SkillSwapApplication.java   # Main entry point of the Spring Boot app
+        │   │   │           ├── auth/                       # Authentication Module
+        │   │   │           │   ├── AuthController.java     # Endpoints for /register and /login
+        │   │   │           │   ├── dto/                    # Data Transfer Objects for Auth requests
+        │   │   │           │   └── service/                # Business logic for password hashing and user creation
+        │   │   │           ├── chat/                       # Messaging Module
+        │   │   │           │   ├── ChatController.java     # Endpoints to fetch/send messages
+        │   │   │           │   ├── Message.java            # JPA Entity for chat storage
+        │   │   │           │   ├── MessageRepository.java  # DB interface for message retrieval
+        │   │   │           │   ├── dto/                    # Payload formats for chat communication
+        │   │   │           │   └── service/                # Logic to ensure only swap partners can chat
+        │   │   │           ├── config/                     # System Configurations
+        │   │   │           │   ├── AdminBootstrap.java     # Automatically creates an admin account on first run
+        │   │   │           │   ├── CorsConfig.java         # Allows frontend-backend cross-origin communication
+        │   │   │           │   ├── OpenApiConfig.java      # Swagger/OpenAPI documentation setup
+        │   │   │           │   └── SecurityConfig.java     # Stateless security rules and role access controls
+        │   │   │           ├── exception/                  # Error Handling
+        │   │   │           │   ├── ApiError.java           # Standard format for API error responses
+        │   │   │           │   ├── GlobalExceptionHandler.java # Catches app-wide errors to return clean JSON
+        │   │   │           │   └── custom/                 # App-specific exceptions (NotFound, Forbidden, etc.)
+        │   │   │           ├── notification/               # Updates Module
+        │   │   │           │   ├── NotificationController.java # Unified endpoint for all user updates
+        │   │   │           │   ├── dto/                    # Payload for polymorphic notifications
+        │   │   │           │   └── service/                # Logic to aggregate messages and swap updates
+        │   │   │           ├── security/                   # Security Implementation
+        │   │   │           │   ├── JwtAuthFilter.java      # Intercepts requests to validate the JWT in headers
+        │   │   │           │   └── JwtService.java         # Utilities for creating and parsing JWT tokens
+        │   │   │           ├── skill/                      # Skill Management Module
+        │   │   │           │   ├── Skill.java              # JPA Entity with Soft Delete and Locking flags
+        │   │   │           │   ├── SkillController.java    # Endpoints for listing and managing skills
+        │   │   │           │   ├── SkillRepository.java    # Optimized queries for active/unlocked skills
+        │   │   │           │   ├── dto/                    # Skill-specific request/response formats
+        │   │   │           │   └── service/                # Logic for soft deletion and skill search
+        │   │   │           ├── swap/                       # Barter Engine Module
+        │   │   │           │   ├── SwapRequest.java        # Core entity linking two users and two skills
+        │   │   │           │   ├── SwapRequestController.java # Endpoints for the swap lifecycle
+        │   │   │           │   ├── SwapRequestRepository.java # DB interface for transactional swap data
+        │   │   │           │   ├── SwapStatus.java         # Enum for PENDING, APPROVED, REJECTED
+        │   │   │           │   ├── dto/                    # Payload formats for creating swaps
+        │   │   │           │   └── service/                # Complex logic for skill-locking and P2P barter
+        │   │   │           ├── test/                       # Dev-only testing utilities
+        │   │   │           │   └── TestController.java     # Endpoints to verify role-based security
+        │   │   │           └── user/                       # User Profile Module
+        │   │   │               ├── Role.java               # Enum for STUDENT vs ADMIN
+        │   │   │               ├── User.java               # Core User JPA entity
+        │   │   │               ├── UserController.java     # Endpoints for profile and self-data retrieval
+        │   │   │               ├── UserRepository.java     # DB interface for finding users by email
+        │   │   │               ├── dto/                    # Profile response including swap statistics
+        │   │   │               └── service/                # Logic for calculating user swap success rates
+        │   │   └── resources/
+        │   │       ├── application-prod.yml        # Production database and secret settings
+        │   │       └── application.yml             # Main configuration (PostgreSQL, JWT secrets, logging)
+        │   └── test/                               # Automated Testing
+        │       ├── java/
+        │       │   └── com/
+        │       │       └── skillswap/
+        │       │           └── CoreFlowIntegrationTests.java # End-to-end tests for the entire swap lifecycle
+        │       └── resources/
+        │           └── application-test.yml        # Uses H2 In-Memory DB for fast, isolated testing
+        └── .mvn/                                   # Maven wrapper internal files
+            └── wrapper/
+                └── maven-wrapper.properties        # Defines Maven version to be used by the project
 ```
 
 ---
@@ -668,20 +752,8 @@ Need help? Here's how to get in touch:
 - **🐛 Bug Reports**: [GitHub Issues](https://github.com/sanketshinde2005/SkillSwap/issues)
 - **💡 Feature Requests**: [GitHub Discussions](https://github.com/sanketshinde2005/SkillSwap/discussions)
 - **📧 Email**: sanketshinde1827@gmail.com
-- **💬 Discord**: [Join our community](#)
 
 ---
-
-### 🔄 Version History
-
-#### v1.0.0 (Current)
-
-- ✅ Complete skill exchange system
-- ✅ User authentication & authorization
-- ✅ Admin dashboard
-- ✅ Dark/light theme support
-- ✅ Responsive design
-- ✅ RESTful API with documentation
 
 ---
 
