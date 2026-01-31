@@ -18,26 +18,26 @@
 
 ## 📋 Table of Contents
 
-- [🎯 Overview](#-overview)
-- [✨ Features](#-features)
-- [🏗️ Architecture](#️-architecture)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [🚀 Getting Started](#-getting-started)
-- [📁 Project Structure](#-project-structure)
-- [🔧 API Documentation](#-api-documentation)
-- [🎨 Frontend Features](#-frontend-features)
-- [🔐 Authentication & Security](#-authentication--security)
-- [🗄️ Database Schema](#️-database-schema)
-- [🧪 Testing](#-testing)
-- [🚀 Deployment](#-deployment)
-- [🤝 Contributing](#-contributing)
-- [📝 License](#-license)
-- [👥 Authors](#-authors)
-- [🙏 Acknowledgments](#-acknowledgments)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#️-architecture)
+- [Tech Stack](#️-tech-stack)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [API Documentation](#-api-documentation)
+- [Frontend Features](#-frontend-features)
+- [Authentication & Security](#-authentication--security)
+- [Database Schema](#️-database-schema)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Authors](#-authors)
+- [Acknowledgments](#-acknowledgments)
 
 ---
 
-## 🎯 Overview
+## Overview
 
 SkillSwap is a comprehensive **student-driven skill exchange platform** built with modern web technologies. Our mission is to create a collaborative learning environment where students can:
 
@@ -54,48 +54,48 @@ SkillSwap embodies this philosophy by creating opportunities for students to tea
 
 ---
 
-## ✨ Features
+## Features
 
 ### 👤 User Management
 
-- 🔐 **Secure Authentication** with JWT tokens.
-- 📝 **Easy Registration** with role-based access (Student/Admin).
-- 👥 **Profile Management** featuring swap statistics (Incoming/Outgoing approved counts).
-- 🔄 **Session Management** with secure client-side storage.
+- **Secure Authentication** with JWT tokens.
+- **Easy Registration** with role-based access (Student/Admin).
+- **Profile Management** featuring swap statistics (Incoming/Outgoing approved counts).
+- **Session Management** with secure client-side storage.
 
 ### 🎓 Skill Exchange System (True Barter)
-- 📚 **Dual Listing** - Create "OFFER" (what you teach) or "LEARN" (what you want) listings.
-- 🤝 **Peer-to-Peer Proposals** - Propose a swap by selecting which of *your* skills you will give in return for the skill you want.
-- 🔒 **Skill Locking** - Skills are automatically locked once a swap is approved to prevent double-booking.
-- 🗑️ **Soft Delete** - Skills can be deactivated without breaking transaction history.
-- ✅ **Admin/Peer Approval** - Direct receiver approval with optional admin oversight.
+- **Dual Listing** - Create "OFFER" (what you teach) or "LEARN" (what you want) listings.
+- **Peer-to-Peer Proposals** - Propose a swap by selecting which of *your* skills you will give in return for the skill you want.
+- **Skill Locking** - Skills are automatically locked once a swap is approved to prevent double-booking.
+- **Soft Delete** - Skills can be deactivated without breaking transaction history.
+- **Admin/Peer Approval** - Direct receiver approval with optional admin oversight.
 
 ### 💬 Communication & Notifications
 
-- 💬 **Swap-Specific Chat** - Real-time messaging available exclusively for approved swap partners.
-- 🔔 **Unified Notification Feed** - A centralized "Updates" box for new messages and swap status changes (Approved/Rejected).
-- 🔄 **Smart Polling** - Optimized message fetching to keep conversations fluid.
+- **Swap-Specific Chat** - Real-time messaging available exclusively for approved swap partners.
+- **Unified Notification Feed** - A centralized "Updates" box for new messages and swap status changes (Approved/Rejected).
+- **Smart Polling** - Optimized message fetching to keep conversations fluid.
 - 
-## 👨‍💼 Admin Dashboard
+### 👨‍💼 Admin Dashboard
 
-- 👀 **Swap Oversight** - Review every barter request on the platform.
-- 📈 **Platform Analytics** - Real-time stats on pending, approved, and rejected swaps.
-- 🛡️ **Role-Based Routing** - Automated redirection based on user privileges.
+- **Swap Oversight** - Review every barter request on the platform.
+- **Platform Analytics** - Real-time stats on pending, approved, and rejected swaps.
+- **Role-Based Routing** - Automated redirection based on user privileges.
 
 ### 🎨 Modern UI/UX
 
-- 🌙 **Aesthetic Theme System** - Sophisticated light and dark modes.
-- 📱 **Responsive Design** - Fluid layouts for desktop, tablet, and mobile.
-- 🧊 **3D Visuals** - Interactive 3D cube hero section using CSS perspective.
-- ⚡ **Neobrutalist Elements** - Bold borders and high-contrast cards for a modern feel.
+- **Aesthetic Theme System** - Sophisticated light and dark modes.
+- **Responsive Design** - Fluid layouts for desktop, tablet, and mobile.
+- **3D Visuals** - Interactive 3D cube hero section using CSS perspective.
+- **Neobrutalist Elements** - Bold borders and high-contrast cards for a modern feel.
 
 ### 🔒 Security Features
 
-- 🛡️ **Spring Security** integration
-- 🔐 **JWT Authentication** with secure token handling
-- 🧱 **CORS Configuration** for cross-origin requests
-- ✅ **Input Validation** and sanitization
-- 🚫 **SQL Injection Prevention** with JPA/Hibernate
+- **Spring Security** integration
+- **JWT Authentication** with secure token handling
+- **CORS Configuration** for cross-origin requests
+- **Input Validation** and sanitization
+- **SQL Injection Prevention** with JPA/Hibernate
 
 ---
 
@@ -186,7 +186,7 @@ graph TB
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 📋 Prerequisites
 
@@ -416,7 +416,7 @@ Once both servers are running, visit:
 
 ---
 
-## 🔧 API Documentation
+## API Documentation
 
 ### 🔐 Authentication Endpoints
 
@@ -483,7 +483,7 @@ Content-Type: application/json
 
 ---
 
-## 🎨 Frontend Features
+## Frontend Features
 
 ### 🌙 Theme System
 
@@ -515,7 +515,7 @@ Content-Type: application/json
 
 ---
 
-## 🔐 Authentication & Security
+## Authentication & Security
 
 ### 🛡️ Spring Security Configuration
 
@@ -664,7 +664,7 @@ NEXT_PUBLIC_API_URL=https://your-api-domain.com
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from the community! Here's how you can help:
 
@@ -725,7 +725,7 @@ copies or substantial portions of the Software.
 
 ---
 
-## 👥 Authors
+## Authors
 
 ### 🎯 Developer
 
@@ -733,7 +733,7 @@ copies or substantial portions of the Software.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 ### 🛠️ Technologies & Tools
 
@@ -748,9 +748,9 @@ copies or substantial portions of the Software.
 
 Need help? Here's how to get in touch:
 
-- **🐛 Bug Reports**: [GitHub Issues](https://github.com/sanketshinde2005/SkillSwap/issues)
-- **💡 Feature Requests**: [GitHub Discussions](https://github.com/sanketshinde2005/SkillSwap/discussions)
-- **📧 Email**: sanketshinde1827@gmail.com
+- **Bug Reports**: [GitHub Issues](https://github.com/sanketshinde2005/SkillSwap/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/sanketshinde2005/SkillSwap/discussions)
+- **Email**: sanketshinde1827@gmail.com
 
 ---
 
