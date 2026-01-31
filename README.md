@@ -607,7 +607,7 @@ Skill (1) ──── (Many) SwapRequests
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### 🧪 Backend Testing
 
